@@ -8,7 +8,7 @@ import {
 import React from "react";
 import FormInput from "./FormInput";
 
-const ProductInputs = ({ showAsModal, setModal }) => {
+const ProductInputs = ({ showAsModal, setModal, title }) => {
   return (
     <View style={showAsModal && styles.positioning}>
       <FormInput inputTitle={"Product Name"} />
@@ -19,7 +19,7 @@ const ProductInputs = ({ showAsModal, setModal }) => {
           style={styles.addProductsBtn}
           onPress={() => setModal(!showAsModal)}
         >
-          <Text style={styles.btnText}>Add new product</Text>
+          <Text style={styles.btnText}>{title}</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -33,8 +33,9 @@ const styles = StyleSheet.create({
     width: "90%",
     padding: 20,
     left: 17,
-    top: 20,
+    bottom: 25,
     borderRadius: 10,
+    zIndex: 1,
   },
   addProductsBtn: {
     backgroundColor: "green",

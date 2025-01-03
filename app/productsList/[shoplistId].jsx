@@ -15,6 +15,7 @@ import React, { useState } from "react";
 const DisplayShoplist = () => {
   const { shoplistId } = useLocalSearchParams();
   const [isShown, setIsShown] = useState(false);
+  const [title, setTitle] = useState("");
   const data = [
     { id: 1, productName: "Cereal", productQuantity: 2, productPrice: 7000 },
     { id: 2, productName: "Milk", productQuantity: 2, productPrice: 2100 },
@@ -24,9 +25,10 @@ const DisplayShoplist = () => {
 
   const showForm = () => {
     setIsShown(!isShown);
+    setTitle("Add new product");
   };
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={isShown ? styles.containerOpacity : styles.container}>
       <View style={styles.displayWrapper}>
         <Text style={styles.shoplistNameStyle}>Shoplist Name</Text>
         <View style={styles.displayContainer}>
@@ -38,6 +40,9 @@ const DisplayShoplist = () => {
                 productName={item.productName}
                 productPrice={item.productPrice}
                 productQuantity={item.productQuantity}
+                showAsModal={isShown}
+                setModal={setIsShown}
+                setTitle={setTitle}
               />
             )}
             keyExtractor={(item) => item.id}
@@ -48,7 +53,11 @@ const DisplayShoplist = () => {
             }
           />
           {isShown && (
-            <ProductInputs showAsModal={isShown} setModal={setIsShown} />
+            <ProductInputs
+              showAsModal={isShown}
+              setModal={setIsShown}
+              title={title}
+            />
           )}
         </View>
       </View>
@@ -61,6 +70,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#000000eb",
   },
+  containerOpacity: {
+    flex: 1,
+    backgroundColor: "rgb(0, 0, 0)",
+  },
   displayWrapper: {
     flex: 1,
     justifyContent: "center",
@@ -71,8 +84,9 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderColor: "white",
     borderRadius: 10,
-    width: "80%",
     height: "60%",
+    position: "relative",
+    width: "80%",
   },
   addMoreBtn: {
     alignSelf: "center",

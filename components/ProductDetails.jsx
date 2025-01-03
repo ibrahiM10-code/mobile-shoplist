@@ -2,34 +2,55 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React from "react";
+import ProductInputs from "./ProductInputs";
+import React, { useState } from "react";
 
-const ProductDetails = ({ productName, productQuantity, productPrice }) => {
+const ProductDetails = ({
+  productName,
+  productQuantity,
+  productPrice,
+  showAsModal,
+  setModal,
+  setTitle,
+}) => {
+  const showForm = () => {
+    setModal(!showAsModal);
+    // setTitle(() => (title = "Update product"));
+    setTitle("Update product");
+  };
   return (
-    <View style={styles.productDetailsContainer}>
-      <View style={styles.details}>
-        <Text style={styles.productNameText}>{productName}</Text>
-        <Text style={styles.productQuantityText}>
-          Quantity: {productQuantity}
-        </Text>
+    <SafeAreaView style={styles.container}>
+      <View>
+        <View style={styles.productDetailsContainer}>
+          <View style={styles.details}>
+            <Text style={styles.productNameText}>{productName}</Text>
+            <Text style={styles.productQuantityText}>
+              Quantity: {productQuantity}
+            </Text>
+          </View>
+          <Text style={styles.productPrice}>${productPrice}</Text>
+          <View style={styles.actionsContainer}>
+            <TouchableOpacity>
+              <MaterialIcons
+                name="edit-square"
+                size={28}
+                color="green"
+                onPress={showForm}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Ionicons name="trash" size={28} color="red" />
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
-      <Text style={styles.productPrice}>${productPrice}</Text>
-      <View style={styles.actionsContainer}>
-        <TouchableOpacity>
-          <MaterialIcons name="edit-square" size={28} color="green" />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Ionicons name="trash" size={28} color="red" />
-        </TouchableOpacity>
-      </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000000eb",
   },
   productDetailsContainer: {
     flex: 1,
