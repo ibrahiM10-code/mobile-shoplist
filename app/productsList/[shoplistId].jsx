@@ -48,7 +48,7 @@ const DisplayShoplist = () => {
             keyExtractor={(item) => item.id}
             ListFooterComponent={
               <TouchableOpacity style={styles.addMoreBtn} onPress={showForm}>
-                <AntDesign name="plussquare" size={35} color="green" />
+                <AntDesign name="plussquare" size={35} color="#93B1A6" />
               </TouchableOpacity>
             }
           />
@@ -60,6 +60,7 @@ const DisplayShoplist = () => {
             />
           )}
         </View>
+        <Text style={styles.shoplistNameStyle}>Total: $12.800</Text>
       </View>
     </SafeAreaView>
   );
@@ -68,7 +69,7 @@ const DisplayShoplist = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000000eb",
+    backgroundColor: "#040D12",
   },
   containerOpacity: {
     flex: 1,
@@ -80,9 +81,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   displayContainer: {
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "white",
+    backgroundColor: "#183D3D",
     borderRadius: 10,
     height: "60%",
     position: "relative",
@@ -97,6 +96,8 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
     marginBottom: 20,
+    marginTop: 20,
+    fontFamily: "Outfit-Bold",
   },
 });
 

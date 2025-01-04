@@ -17,7 +17,7 @@ const HomeScreen = () => {
             <AntDesign
               name="plussquare"
               size={35}
-              color="green"
+              color="#93B1A6"
               onPress={() => router.push("/add-shoplist")}
             />
           </TouchableOpacity>
@@ -31,16 +31,15 @@ const styles = StyleSheet.create({
   homeContainer: {
     width: "80%",
     alignItems: "center",
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "white",
+    backgroundColor: "#183D3D",
+    elevation: 24,
     borderRadius: 10,
     paddingTop: 20,
     paddingBottom: 20,
   },
   container: {
     flex: 1,
-    backgroundColor: "#000000eb",
+    backgroundColor: "#040D12",
   },
   homeWrapper: {
     flex: 1,
@@ -51,6 +50,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 25,
     marginBottom: 10,
+    fontFamily: "Outfit-Regular",
   },
 });
 

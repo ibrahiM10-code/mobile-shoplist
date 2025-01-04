@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import ProductInputs from "./ProductInputs";
 import React, { useState } from "react";
 
 const ProductDetails = ({
@@ -15,7 +14,6 @@ const ProductDetails = ({
 }) => {
   const showForm = () => {
     setModal(!showAsModal);
-    // setTitle(() => (title = "Update product"));
     setTitle("Update product");
   };
   return (
@@ -34,12 +32,12 @@ const ProductDetails = ({
               <MaterialIcons
                 name="edit-square"
                 size={28}
-                color="green"
+                color="#5C8374"
                 onPress={showForm}
               />
             </TouchableOpacity>
             <TouchableOpacity>
-              <Ionicons name="trash" size={28} color="red" />
+              <Ionicons name="trash" size={28} color="#5C8374" />
             </TouchableOpacity>
           </View>
         </View>
@@ -55,6 +53,7 @@ const styles = StyleSheet.create({
   productDetailsContainer: {
     flex: 1,
     flexDirection: "row",
+    backgroundColor: "#183D3D",
     borderBottomWidth: 1,
     borderBottomColor: "white",
     borderStyle: "solid",
@@ -65,15 +64,18 @@ const styles = StyleSheet.create({
   productNameText: {
     color: "white",
     fontSize: 18,
+    fontFamily: "Outfit-Regular",
   },
   productQuantityText: {
     color: "white",
     fontSize: 15,
+    fontFamily: "Outfit-Regular",
   },
   productPrice: {
     color: "white",
     fontSize: 20,
     alignSelf: "center",
+    fontFamily: "Outfit-Medium",
   },
   actionsContainer: {
     padding: 10,

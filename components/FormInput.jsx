@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: "white",
     marginBottom: 10,
+    fontFamily: "Outfit-Medium",
   },
   inputTypeStyle: {
     backgroundColor: "transparent",
@@ -32,6 +33,7 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderRadius: 10,
     color: "white",
+    fontFamily: "Outfit-Regular",
     padding: 10,
     width: "100%",
     marginBottom: 15,

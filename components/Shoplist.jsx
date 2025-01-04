@@ -9,7 +9,7 @@ const Shoplist = () => {
       <View style={styles.shoplistWrapper}>
         <Text style={styles.shoplistNameStyle}>Shoplist #1</Text>
         <TouchableOpacity>
-          <Ionicons name="trash" size={28} color="red" />
+          <Ionicons name="trash" size={28} color="#5C8374" />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
   },
   shoplistNameStyle: {
     color: "white",
+    fontFamily: "Outfit-Regular",
     fontSize: 18,
   },
 });

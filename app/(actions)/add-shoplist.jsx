@@ -25,7 +25,7 @@ const AddShoplist = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000000eb",
+    backgroundColor: "#040D12",
   },
   addShoplistWrapper: {
     flex: 1,
@@ -33,15 +33,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   addShoplistContainer: {
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "white",
+    backgroundColor: "#183D3D",
     borderRadius: 10,
     padding: 20,
     width: "80%",
   },
   addShoplistBtn: {
-    backgroundColor: "green",
+    backgroundColor: "#5C8374",
     borderRadius: 10,
     marginTop: 20,
     padding: 10,
@@ -51,6 +49,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     textAlign: "center",
+    fontFamily: "Outfit-Bold",
   },
 });
 

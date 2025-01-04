@@ -31,12 +31,10 @@ const AddProducts = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000000eb",
+    backgroundColor: "#040D12",
   },
   addProductsContainer: {
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "white",
+    backgroundColor: "#183D3D",
     borderRadius: 10,
     paddingTop: 20,
     paddingBottom: 20,
@@ -55,6 +53,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
     marginBottom: 20,
+    fontFamily: "Outfit-Bold",
   },
   addProductsBtnContainer: {
     flexDirection: "row",
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   addProductsBtn: {
-    backgroundColor: "green",
+    backgroundColor: "#93B1A6",
     borderRadius: 10,
     padding: 10,
     width: "45%",
@@ -73,6 +72,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     textAlign: "center",
+    fontFamily: "Outfit-Bold",
   },
 });
 
