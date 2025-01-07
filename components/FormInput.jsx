@@ -1,7 +1,7 @@
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import React from "react";
 
-const FormInput = ({ inputTitle }) => {
+const FormInput = ({ inputTitle, value, setValue }) => {
   return (
     <View style={styles.inputContainer}>
       <Text style={styles.inputTitleStyle}>{inputTitle}</Text>
@@ -12,6 +12,8 @@ const FormInput = ({ inputTitle }) => {
             ? "numeric"
             : "text"
         }
+        value={value}
+        onChangeText={setValue}
       />
     </View>
   );

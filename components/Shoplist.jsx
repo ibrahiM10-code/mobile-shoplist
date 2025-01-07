@@ -3,11 +3,11 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 
-const Shoplist = () => {
+const Shoplist = ({ name }) => {
   return (
     <SafeAreaView>
       <View style={styles.shoplistWrapper}>
-        <Text style={styles.shoplistNameStyle}>Shoplist #1</Text>
+        <Text style={styles.shoplistNameStyle}>{name}</Text>
         <TouchableOpacity>
           <Ionicons name="trash" size={28} color="#5C8374" />
         </TouchableOpacity>

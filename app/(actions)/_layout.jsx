@@ -1,13 +1,15 @@
 import { Stack } from "expo-router";
 import React from "react";
-import { View } from "react-native";
+import { ShoplistProvider } from "../../context/ShoplistProvider";
 
 const ActionsLayout = () => {
   return (
-    <Stack>
-      <Stack.Screen name="add-shoplist" options={{ headerShown: false }} />
-      <Stack.Screen name="add-products" options={{ headerShown: false }} />
-    </Stack>
+    <ShoplistProvider>
+      <Stack>
+        <Stack.Screen name="add-shoplist" options={{ headerShown: false }} />
+        <Stack.Screen name="add-products" options={{ headerShown: false }} />
+      </Stack>
+    </ShoplistProvider>
   );
 };
 

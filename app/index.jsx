@@ -1,17 +1,40 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useEffect, useState } from "react";
 import { router } from "expo-router";
 import Shoplist from "../components/Shoplist";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import React from "react";
+import axios from "axios";
 import "../styles.css";
 
 const HomeScreen = () => {
+  const [shoplists, setShoplists] = useState([]);
+  useEffect(() => {
+    const getAllShoplists = async () => {
+      try {
+        const response = await axios.get(
+          `http://192.168.0.8:3001/api/shoplists`
+        );
+        const data = response.data;
+        if (response.status === 404) {
+          setShoplists([]);
+        } else {
+          console.log(data);
+          setShoplists(data);
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+    getAllShoplists();
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.homeWrapper}>
         <View style={styles.homeContainer}>
-          <Shoplist />
+          {shoplists.map((shoplist, index) => (
+            <Shoplist name={shoplist.name} key={index} />
+          ))}
           <Text style={styles.textStyle}>Add a new shoplist</Text>
           <TouchableOpacity>
             <AntDesign

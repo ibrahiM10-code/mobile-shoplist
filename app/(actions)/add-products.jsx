@@ -2,22 +2,95 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import ProductInputs from "../../components/ProductInputs";
-import React from "react";
+import ShoplistContext from "../../context/ShoplistProvider";
+import React, { useContext, useState } from "react";
+import axios from "axios";
 
 const AddProducts = () => {
+  const { shoplistName } = useContext(ShoplistContext);
+  const [productDetails, setProductDetails] = useState([]);
+  const [productData, setProductData] = useState({
+    name: "",
+    quantity: 0,
+    price: 0,
+  });
+
+  const setDetails = () => {
+    setProductDetails((prevProduct) => {
+      return [...prevProduct, productData];
+    });
+    console.log("Added!");
+  };
+
+  const handleProductInfo = (name, value) => {
+    setProductData((prevProduct) => {
+      return {
+        ...prevProduct,
+        [name]: value,
+      };
+    });
+  };
+
+  const dataPayload = () => {
+    let quantitiesArray = [];
+    let pricesArray = [];
+    let productsArray = [];
+    let totalsArray = [];
+    productDetails.map((content) => {
+      totalsArray.push(content.quantity * content.price);
+      productsArray.push(content.name);
+      quantitiesArray.push(parseInt(content.quantity));
+      pricesArray.push(parseInt(content.price));
+      return 1;
+    });
+    const total = totalsArray.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    }, 0);
+    const shoplistData = {
+      name: shoplistName,
+      products: productsArray,
+      quantity: quantitiesArray,
+      price: pricesArray,
+      subTotal: total,
+    };
+    console.log(shoplistData);
+    return shoplistData;
+  };
+
+  const addNewShoplist = async () => {
+    try {
+      const data = dataPayload();
+      const response = await axios.post(
+        "http://192.168.0.8:3001/api/add-shoplist",
+        data
+      );
+      if (response.status === 201) {
+        console.log("Shoplist created successfully!");
+        router.push("/productsList/" + response.data._id);
+      }
+    } catch (error) {
+      if (error.status === 400) {
+        console.error("Failed to create the shoplist.", error);
+      }
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.addProductsWrapper}>
         <View style={styles.addProductsContainer}>
-          <Text style={styles.textStyle}>Add products to the shoplist</Text>
-          <ProductInputs />
+          <Text style={styles.textStyle}>Add products to {shoplistName}</Text>
+          <ProductInputs data={productData} fn={handleProductInfo} />
           <View style={styles.addProductsBtnContainer}>
-            <TouchableOpacity style={styles.addProductsBtn}>
+            <TouchableOpacity
+              style={styles.addProductsBtn}
+              onPress={setDetails}
+            >
               <Text style={styles.btnText}>Add Product</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.addProductsBtn}
-              onPress={() => router.push("/productsList/1")}
+              onPress={addNewShoplist}
             >
               <Text style={styles.btnText}>Finish Shoplist</Text>
             </TouchableOpacity>

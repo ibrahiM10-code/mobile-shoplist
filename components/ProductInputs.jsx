@@ -5,15 +5,24 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import FormInput from "./FormInput";
 
-const ProductInputs = ({ showAsModal, setModal, title }) => {
+const ProductInputs = ({ showAsModal, setModal, title, data, fn }) => {
   return (
     <View style={showAsModal && styles.positioning}>
-      <FormInput inputTitle={"Product Name"} />
-      <FormInput inputTitle={"Quantity"} />
-      <FormInput inputTitle={"Price"} />
+      <FormInput
+        inputTitle={"Product Name"}
+        setValue={(value) => fn("name", value)}
+      />
+      <FormInput
+        inputTitle={"Quantity"}
+        setValue={(value) => fn("quantity", value)}
+      />
+      <FormInput
+        inputTitle={"Price"}
+        setValue={(value) => fn("price", value)}
+      />
       {showAsModal && (
         <TouchableOpacity
           style={styles.addProductsBtn}
@@ -29,7 +38,7 @@ const ProductInputs = ({ showAsModal, setModal, title }) => {
 const styles = StyleSheet.create({
   positioning: {
     position: "absolute",
-    backgroundColor: "black",
+    backgroundColor: "#040D12",
     width: "90%",
     padding: 20,
     left: 17,
@@ -38,7 +47,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   addProductsBtn: {
-    backgroundColor: "green",
+    backgroundColor: "#93B1A6",
     borderRadius: 10,
     padding: 10,
     width: "50%",

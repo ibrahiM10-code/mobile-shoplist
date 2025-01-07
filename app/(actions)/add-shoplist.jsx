@@ -2,17 +2,29 @@ import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import FormInput from "../../components/FormInput";
-import React from "react";
+import ShoplistContext from "../../context/ShoplistProvider";
+import React, { useState, useContext } from "react";
 
 const AddShoplist = () => {
+  const [newShoplist, setNewShoplist] = useState("");
+  const { newShoplistName } = useContext(ShoplistContext);
+
+  const handleOnPress = () => {
+    newShoplistName(newShoplist);
+    router.push("/add-products");
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.addShoplistWrapper}>
         <View style={styles.addShoplistContainer}>
-          <FormInput inputTitle={"Name your new shoplist"} />
+          <FormInput
+            inputTitle={"Name your new shoplist"}
+            value={newShoplist}
+            setValue={setNewShoplist}
+          />
           <TouchableOpacity
             style={styles.addShoplistBtn}
-            onPress={() => router.push("/add-products")}
+            onPress={handleOnPress}
           >
             <Text style={styles.btnText}>Add new shoplist</Text>
           </TouchableOpacity>
