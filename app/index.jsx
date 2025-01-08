@@ -19,7 +19,6 @@ const HomeScreen = () => {
         if (response.status === 404) {
           setShoplists([]);
         } else {
-          console.log(data);
           setShoplists(data);
         }
       } catch (error) {

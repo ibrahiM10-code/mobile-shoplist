@@ -19,7 +19,7 @@ const AddProducts = () => {
     setProductDetails((prevProduct) => {
       return [...prevProduct, productData];
     });
-    console.log("Added!");
+    console.log("Added! to ", shoplistName);
   };
 
   const handleProductInfo = (name, value) => {
@@ -66,7 +66,7 @@ const AddProducts = () => {
       );
       if (response.status === 201) {
         console.log("Shoplist created successfully!");
-        router.push("/productsList/" + response.data._id);
+        router.push("/productsList/" + shoplistName);
       }
     } catch (error) {
       if (error.status === 400) {

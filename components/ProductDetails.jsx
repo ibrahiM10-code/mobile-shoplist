@@ -4,14 +4,8 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useState } from "react";
 
-const ProductDetails = ({
-  productName,
-  productQuantity,
-  productPrice,
-  showAsModal,
-  setModal,
-  setTitle,
-}) => {
+const ProductDetails = ({ details, showAsModal, setModal, setTitle }) => {
+  //console.log(details.price);
   const showForm = () => {
     setModal(!showAsModal);
     setTitle("Update product");
@@ -19,28 +13,30 @@ const ProductDetails = ({
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <View style={styles.productDetailsContainer}>
-          <View style={styles.details}>
-            <Text style={styles.productNameText}>{productName}</Text>
-            <Text style={styles.productQuantityText}>
-              Quantity: {productQuantity}
-            </Text>
+        {details.products.map((product, index) => (
+          <View style={styles.productDetailsContainer}>
+            <View style={styles.details}>
+              <Text style={styles.productNameText}>{product}</Text>
+              <Text style={styles.productQuantityText}>
+                Quantity: {details.quantity[index]}
+              </Text>
+            </View>
+            <Text style={styles.productPrice}>${details.price[index]}</Text>
+            <View style={styles.actionsContainer}>
+              <TouchableOpacity>
+                <MaterialIcons
+                  name="edit-square"
+                  size={28}
+                  color="#5C8374"
+                  onPress={showForm}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Ionicons name="trash" size={28} color="#5C8374" />
+              </TouchableOpacity>
+            </View>
           </View>
-          <Text style={styles.productPrice}>${productPrice}</Text>
-          <View style={styles.actionsContainer}>
-            <TouchableOpacity>
-              <MaterialIcons
-                name="edit-square"
-                size={28}
-                color="#5C8374"
-                onPress={showForm}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Ionicons name="trash" size={28} color="#5C8374" />
-            </TouchableOpacity>
-          </View>
-        </View>
+        ))}
       </View>
     </SafeAreaView>
   );
@@ -63,8 +59,9 @@ const styles = StyleSheet.create({
   },
   productNameText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 17,
     fontFamily: "Outfit-Regular",
+    maxWidth: 67,
   },
   productQuantityText: {
     color: "white",
@@ -74,8 +71,10 @@ const styles = StyleSheet.create({
   productPrice: {
     color: "white",
     fontSize: 20,
-    alignSelf: "center",
+    // alignSelf: "",
     fontFamily: "Outfit-Medium",
+    // position: "absolute",
+    // left: 160,
   },
   actionsContainer: {
     padding: 10,

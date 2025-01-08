@@ -1,13 +1,16 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Link } from "expo-router";
 import React from "react";
 
 const Shoplist = ({ name }) => {
   return (
     <SafeAreaView>
       <View style={styles.shoplistWrapper}>
-        <Text style={styles.shoplistNameStyle}>{name}</Text>
+        <Link href={`/productsList/${name}`} style={styles.shoplistNameStyle}>
+          {name}
+        </Link>
         <TouchableOpacity>
           <Ionicons name="trash" size={28} color="#5C8374" />
         </TouchableOpacity>

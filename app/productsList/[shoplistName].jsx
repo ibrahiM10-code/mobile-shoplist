@@ -10,12 +10,36 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { useLocalSearchParams } from "expo-router";
 import ProductDetails from "../../components/ProductDetails";
 import ProductInputs from "../../components/ProductInputs";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { uid } from "uid";
+import axios from "axios";
 
 const DisplayShoplist = () => {
-  const { shoplistId } = useLocalSearchParams();
+  const { shoplistName } = useLocalSearchParams();
   const [isShown, setIsShown] = useState(false);
   const [title, setTitle] = useState("");
+  const [shoplistContent, setShoplistContent] = useState([]);
+
+  useEffect(() => {
+    const getShoplistContent = async () => {
+      try {
+        console.log(shoplistName);
+        const response = await axios.get(
+          `http://192.168.0.8:3001/api/shoplist/${shoplistName}`
+        );
+        if (response.status === 200) {
+          setShoplistContent(response.data);
+          console.log("Shoplist loaded!", response.data);
+        }
+      } catch (error) {
+        if (error.status === 404) {
+          console.error("There has been an error when loading this shoplist.");
+        }
+      }
+    };
+    getShoplistContent();
+  }, []);
+
   const data = [
     { id: 1, productName: "Cereal", productQuantity: 2, productPrice: 7000 },
     { id: 2, productName: "Milk", productQuantity: 2, productPrice: 2100 },
@@ -30,22 +54,21 @@ const DisplayShoplist = () => {
   return (
     <SafeAreaView style={isShown ? styles.containerOpacity : styles.container}>
       <View style={styles.displayWrapper}>
-        <Text style={styles.shoplistNameStyle}>Shoplist Name</Text>
+        <Text style={styles.shoplistNameStyle}>{shoplistName}</Text>
         <View style={styles.displayContainer}>
           <FlatList
             style={styles.flatList}
-            data={data}
+            data={shoplistContent}
             renderItem={({ item }) => (
               <ProductDetails
-                productName={item.productName}
-                productPrice={item.productPrice}
-                productQuantity={item.productQuantity}
+                details={item}
                 showAsModal={isShown}
                 setModal={setIsShown}
                 setTitle={setTitle}
+                key={uid()}
               />
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item._id}
             ListFooterComponent={
               <TouchableOpacity style={styles.addMoreBtn} onPress={showForm}>
                 <AntDesign name="plussquare" size={35} color="#93B1A6" />

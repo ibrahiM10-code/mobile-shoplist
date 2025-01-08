@@ -1,6 +1,7 @@
 import * as SplashScreen from "expo-splash-screen";
 import { Stack, View } from "expo-router";
 import { useFonts } from "expo-font";
+import { ShoplistProvider } from "../context/ShoplistProvider";
 import React, { useEffect } from "react";
 
 SplashScreen.preventAutoHideAsync();
@@ -23,14 +24,16 @@ const RootLayout = () => {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="(actions)" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="productsList/[shoplistId]"
-        options={{ headerShown: false }}
-      />
-    </Stack>
+    <ShoplistProvider>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(actions)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="productsList/[shoplistName]"
+          options={{ headerShown: false }}
+        />
+      </Stack>
+    </ShoplistProvider>
   );
 };
 
