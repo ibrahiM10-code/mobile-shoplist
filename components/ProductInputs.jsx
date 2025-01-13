@@ -5,29 +5,41 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import FormInput from "./FormInput";
 
-const ProductInputs = ({ showAsModal, setModal, title, data, fn }) => {
+const ProductInputs = ({
+  showAsModal,
+  setModal,
+  title,
+  data,
+  fn,
+  btnAction,
+}) => {
+  const action = () => {
+    btnAction();
+    console.log("Executed");
+    setModal(!showAsModal);
+  };
   return (
     <View style={showAsModal && styles.positioning}>
       <FormInput
         inputTitle={"Product Name"}
+        value={data.name}
         setValue={(value) => fn("name", value)}
       />
       <FormInput
         inputTitle={"Quantity"}
+        value={data.quantity.toString()}
         setValue={(value) => fn("quantity", value)}
       />
       <FormInput
         inputTitle={"Price"}
+        value={data.price.toString()}
         setValue={(value) => fn("price", value)}
       />
       {showAsModal && (
-        <TouchableOpacity
-          style={styles.addProductsBtn}
-          onPress={() => setModal(!showAsModal)}
-        >
+        <TouchableOpacity style={styles.addProductsBtn} onPress={action}>
           <Text style={styles.btnText}>{title}</Text>
         </TouchableOpacity>
       )}

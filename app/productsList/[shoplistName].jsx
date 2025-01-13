@@ -19,17 +19,22 @@ const DisplayShoplist = () => {
   const [isShown, setIsShown] = useState(false);
   const [title, setTitle] = useState("");
   const [shoplistContent, setShoplistContent] = useState([]);
+  const [productData, setProductData] = useState({
+    name: "",
+    quantity: 0,
+    price: 0,
+    index: 0,
+  });
 
   useEffect(() => {
     const getShoplistContent = async () => {
       try {
-        console.log(shoplistName);
         const response = await axios.get(
           `http://192.168.0.8:3001/api/shoplist/${shoplistName}`
         );
         if (response.status === 200) {
           setShoplistContent(response.data);
-          console.log("Shoplist loaded!", response.data);
+          console.log("Shoplist loaded!");
         }
       } catch (error) {
         if (error.status === 404) {
@@ -40,12 +45,54 @@ const DisplayShoplist = () => {
     getShoplistContent();
   }, []);
 
-  const data = [
-    { id: 1, productName: "Cereal", productQuantity: 2, productPrice: 7000 },
-    { id: 2, productName: "Milk", productQuantity: 2, productPrice: 2100 },
-    { id: 3, productName: "Takis", productQuantity: 1, productPrice: 1200 },
-    { id: 4, productName: "Cheese", productQuantity: 1, productPrice: 2500 },
-  ];
+  const handleProductInfo = (name, value) => {
+    setProductData((prevProduct) => {
+      return {
+        ...prevProduct,
+        [name]: value,
+      };
+    });
+  };
+
+  const prepUpdate = () => {
+    shoplistContent[0].quantity[productData.index] = parseInt(
+      productData.quantity
+    );
+    shoplistContent[0].price[productData.index] = parseInt(productData.price);
+    let totals = [];
+    for (let index = 0; index < shoplistContent[0].price.length; index++) {
+      totals.push(
+        shoplistContent[0].price[index] * shoplistContent[0].quantity[index]
+      );
+    }
+    const total = totals.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    }, 0);
+    shoplistContent[0].subTotal = total;
+    return total;
+  };
+
+  const updateProduct = async () => {
+    const total = prepUpdate();
+    try {
+      const response = await axios.put(
+        `http://192.168.0.8:3001/api/update-shoplist/${shoplistContent[0]._id}`,
+        {
+          quantity: shoplistContent[0].quantity,
+          price: shoplistContent[0].price,
+          subTotal: total,
+        }
+      );
+      if (response.status === 200) {
+        console.log("Update succesful.");
+      }
+    } catch (error) {
+      if (error.status === 404) {
+        console.log("Error while updating.");
+      }
+    }
+    console.log(response);
+  };
 
   const showForm = () => {
     setIsShown(!isShown);
@@ -65,6 +112,8 @@ const DisplayShoplist = () => {
                 showAsModal={isShown}
                 setModal={setIsShown}
                 setTitle={setTitle}
+                setProductData={setProductData}
+                productData={productData}
                 key={uid()}
               />
             )}
@@ -80,10 +129,19 @@ const DisplayShoplist = () => {
               showAsModal={isShown}
               setModal={setIsShown}
               title={title}
+              data={productData}
+              btnAction={updateProduct}
+              fn={handleProductInfo}
             />
           )}
         </View>
-        <Text style={styles.shoplistNameStyle}>Total: $12.800</Text>
+        {shoplistContent.length > 0 ? (
+          <Text style={styles.shoplistNameStyle}>
+            Total: ${shoplistContent[0].subTotal}
+          </Text>
+        ) : (
+          <Text style={styles.shoplistNameStyle}>Total: $0</Text>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -106,7 +164,7 @@ const styles = StyleSheet.create({
   displayContainer: {
     backgroundColor: "#183D3D",
     borderRadius: 10,
-    height: "60%",
+    height: "50%",
     position: "relative",
     width: "80%",
   },

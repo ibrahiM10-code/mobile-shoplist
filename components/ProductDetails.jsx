@@ -1,20 +1,27 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useState, useEffect } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { useState } from "react";
+import axios from "axios";
 
-const ProductDetails = ({ details, showAsModal, setModal, setTitle }) => {
-  //console.log(details.price);
-  const showForm = () => {
+const ProductDetails = ({
+  details,
+  showAsModal,
+  setModal,
+  setTitle,
+  setProductData,
+}) => {
+  const showForm = (name, quantity, price, index) => {
     setModal(!showAsModal);
     setTitle("Update product");
+    setProductData({ name, quantity, price, index });
   };
   return (
     <SafeAreaView style={styles.container}>
       <View>
         {details.products.map((product, index) => (
-          <View style={styles.productDetailsContainer}>
+          <View style={styles.productDetailsContainer} key={index}>
             <View style={styles.details}>
               <Text style={styles.productNameText}>{product}</Text>
               <Text style={styles.productQuantityText}>
@@ -28,7 +35,14 @@ const ProductDetails = ({ details, showAsModal, setModal, setTitle }) => {
                   name="edit-square"
                   size={28}
                   color="#5C8374"
-                  onPress={showForm}
+                  onPress={() =>
+                    showForm(
+                      product,
+                      details.quantity[index],
+                      details.price[index],
+                      index
+                    )
+                  }
                 />
               </TouchableOpacity>
               <TouchableOpacity>
