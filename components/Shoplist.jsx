@@ -2,16 +2,34 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
+import axios from "axios";
 import React from "react";
 
-const Shoplist = ({ name }) => {
+const Shoplist = ({ name, shoplistId, setReload, reload }) => {
+  const deleteShoplist = async () => {
+    try {
+      const response = await axios.delete(
+        `http://192.168.0.8:3001/api/delete-shoplist/${shoplistId}`
+      );
+      if (response.status === 200) {
+        console.log(`The ${name} shoplist has been deleted.`);
+        setReload(!reload);
+      }
+    } catch (error) {
+      if (error.status === 400) {
+        console.log(
+          `There has been an error when deleting the ${name} shoplist.`
+        );
+      }
+    }
+  };
   return (
     <SafeAreaView>
       <View style={styles.shoplistWrapper}>
         <Link href={`/productsList/${name}`} style={styles.shoplistNameStyle}>
           {name}
         </Link>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={deleteShoplist}>
           <Ionicons name="trash" size={28} color="#5C8374" />
         </TouchableOpacity>
       </View>

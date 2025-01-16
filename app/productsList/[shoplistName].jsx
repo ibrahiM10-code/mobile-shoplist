@@ -10,12 +10,14 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { useLocalSearchParams } from "expo-router";
 import ProductDetails from "../../components/ProductDetails";
 import ProductInputs from "../../components/ProductInputs";
-import React, { useState, useEffect } from "react";
+import ShoplistContext from "../../context/ShoplistProvider";
+import React, { useState, useEffect, useContext } from "react";
 import { uid } from "uid";
 import axios from "axios";
 
 const DisplayShoplist = () => {
   const { shoplistName } = useLocalSearchParams();
+  const { reload, setReload } = useContext(ShoplistContext);
   const [isShown, setIsShown] = useState(false);
   const [title, setTitle] = useState("");
   const [shoplistContent, setShoplistContent] = useState([]);
@@ -28,6 +30,7 @@ const DisplayShoplist = () => {
 
   useEffect(() => {
     const getShoplistContent = async () => {
+      console.log(shoplistName);
       try {
         const response = await axios.get(
           `http://192.168.0.8:3001/api/shoplist/${shoplistName}`
@@ -38,12 +41,15 @@ const DisplayShoplist = () => {
         }
       } catch (error) {
         if (error.status === 404) {
-          console.error("There has been an error when loading this shoplist.");
+          console.error(
+            "There has been an error when loading this shoplist.",
+            error
+          );
         }
       }
     };
     getShoplistContent();
-  }, []);
+  }, [reload]);
 
   const handleProductInfo = (name, value) => {
     setProductData((prevProduct) => {
@@ -54,11 +60,7 @@ const DisplayShoplist = () => {
     });
   };
 
-  const prepUpdate = () => {
-    shoplistContent[0].quantity[productData.index] = parseInt(
-      productData.quantity
-    );
-    shoplistContent[0].price[productData.index] = parseInt(productData.price);
+  const updateSubTotal = () => {
     let totals = [];
     for (let index = 0; index < shoplistContent[0].price.length; index++) {
       totals.push(
@@ -72,26 +74,67 @@ const DisplayShoplist = () => {
     return total;
   };
 
+  const prepUpdate = () => {
+    shoplistContent[0].quantity[productData.index] = parseInt(
+      productData.quantity
+    );
+    shoplistContent[0].price[productData.index] = parseInt(productData.price);
+    const total = updateSubTotal();
+    const updateContent = {
+      quantity: shoplistContent[0].quantity,
+      price: shoplistContent[0].price,
+      subTotal: total,
+    };
+    return updateContent;
+  };
+
   const updateProduct = async () => {
-    const total = prepUpdate();
+    const updateContent = prepUpdate();
+    console.log(updateContent);
     try {
       const response = await axios.put(
         `http://192.168.0.8:3001/api/update-shoplist/${shoplistContent[0]._id}`,
-        {
-          quantity: shoplistContent[0].quantity,
-          price: shoplistContent[0].price,
-          subTotal: total,
-        }
+        updateContent
       );
       if (response.status === 200) {
         console.log("Update succesful.");
+        setShoplistContent((prev) => ({
+          ...prev,
+          subTotal: updateContent.subTotal,
+        }));
+        setReload(!reload);
+        console.log(shoplistContent);
+        console.log(response.data);
       }
     } catch (error) {
       if (error.status === 404) {
         console.log("Error while updating.");
       }
     }
-    console.log(response);
+  };
+
+  const removeProduct = async (index) => {
+    try {
+      const response = await axios.put(
+        `http://192.168.0.8:3001/api/shoplist/${shoplistName}/${index}`
+      );
+      if (response.status === 200) {
+        console.log("Product removed succesfully!");
+        console.log(response.data);
+        setReload(!reload);
+        setShoplistContent(() => ({
+          products: shoplistContent[0].products.splice(index, 1),
+          quantity: shoplistContent[0].quantity.splice(index, 1),
+          price: shoplistContent[0].price.splice(index, 1),
+        }));
+        shoplistContent[0].subTotal = updateSubTotal();
+        console.log(shoplistContent);
+      }
+    } catch (error) {
+      if (error.status === 400) {
+        console.log("There has been an error. ", error);
+      }
+    }
   };
 
   const showForm = () => {
@@ -114,6 +157,8 @@ const DisplayShoplist = () => {
                 setTitle={setTitle}
                 setProductData={setProductData}
                 productData={productData}
+                shoplistName={shoplistName}
+                removeProduct={removeProduct}
                 key={uid()}
               />
             )}

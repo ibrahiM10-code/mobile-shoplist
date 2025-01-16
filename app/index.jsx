@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { router } from "expo-router";
+import ShoplistContext from "../context/ShoplistProvider";
 import Shoplist from "../components/Shoplist";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import axios from "axios";
@@ -9,6 +10,8 @@ import "../styles.css";
 
 const HomeScreen = () => {
   const [shoplists, setShoplists] = useState([]);
+  const { reload, setReload } = useContext(ShoplistContext);
+
   useEffect(() => {
     const getAllShoplists = async () => {
       try {
@@ -26,14 +29,21 @@ const HomeScreen = () => {
       }
     };
     getAllShoplists();
-  }, []);
+  }, [reload]);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.homeWrapper}>
         <View style={styles.homeContainer}>
-          {shoplists.map((shoplist, index) => (
-            <Shoplist name={shoplist.name} key={index} />
-          ))}
+          {shoplists.length > 0 &&
+            shoplists.map((shoplist, index) => (
+              <Shoplist
+                name={shoplist.name}
+                key={index}
+                shoplistId={shoplist._id}
+                reload={reload}
+                setReload={setReload}
+              />
+            ))}
           <Text style={styles.textStyle}>Add a new shoplist</Text>
           <TouchableOpacity>
             <AntDesign

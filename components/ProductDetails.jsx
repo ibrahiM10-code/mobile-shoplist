@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import ShoplistContext from "../context/ShoplistProvider";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import axios from "axios";
@@ -11,12 +12,14 @@ const ProductDetails = ({
   setModal,
   setTitle,
   setProductData,
+  removeProduct,
 }) => {
   const showForm = (name, quantity, price, index) => {
     setModal(!showAsModal);
     setTitle("Update product");
     setProductData({ name, quantity, price, index });
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -30,22 +33,19 @@ const ProductDetails = ({
             </View>
             <Text style={styles.productPrice}>${details.price[index]}</Text>
             <View style={styles.actionsContainer}>
-              <TouchableOpacity>
-                <MaterialIcons
-                  name="edit-square"
-                  size={28}
-                  color="#5C8374"
-                  onPress={() =>
-                    showForm(
-                      product,
-                      details.quantity[index],
-                      details.price[index],
-                      index
-                    )
-                  }
-                />
+              <TouchableOpacity
+                onPress={() =>
+                  showForm(
+                    product,
+                    details.quantity[index],
+                    details.price[index],
+                    index
+                  )
+                }
+              >
+                <MaterialIcons name="edit-square" size={28} color="#5C8374" />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => removeProduct(index)}>
                 <Ionicons name="trash" size={28} color="#5C8374" />
               </TouchableOpacity>
             </View>
