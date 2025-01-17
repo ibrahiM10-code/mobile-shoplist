@@ -12,6 +12,7 @@ import ProductDetails from "../../components/ProductDetails";
 import ProductInputs from "../../components/ProductInputs";
 import ShoplistContext from "../../context/ShoplistProvider";
 import React, { useState, useEffect, useContext } from "react";
+import CustomBackHandler from "../../components/BackHandler";
 import { uid } from "uid";
 import axios from "axios";
 
@@ -115,19 +116,20 @@ const DisplayShoplist = () => {
 
   const removeProduct = async (index) => {
     try {
+      setShoplistContent(() => ({
+        products: shoplistContent[0].products.splice(index, 1),
+        quantity: shoplistContent[0].quantity.splice(index, 1),
+        price: shoplistContent[0].price.splice(index, 1),
+      }));
+      shoplistContent[0].subTotal = updateSubTotal();
       const response = await axios.put(
-        `http://192.168.0.8:3001/api/shoplist/${shoplistName}/${index}`
+        `http://192.168.0.8:3001/api/shoplist/${shoplistName}/${index}`,
+        { subTotal: shoplistContent[0].subTotal }
       );
       if (response.status === 200) {
         console.log("Product removed succesfully!");
         console.log(response.data);
         setReload(!reload);
-        setShoplistContent(() => ({
-          products: shoplistContent[0].products.splice(index, 1),
-          quantity: shoplistContent[0].quantity.splice(index, 1),
-          price: shoplistContent[0].price.splice(index, 1),
-        }));
-        shoplistContent[0].subTotal = updateSubTotal();
         console.log(shoplistContent);
       }
     } catch (error) {
@@ -144,6 +146,7 @@ const DisplayShoplist = () => {
   return (
     <SafeAreaView style={isShown ? styles.containerOpacity : styles.container}>
       <View style={styles.displayWrapper}>
+        <CustomBackHandler />
         <Text style={styles.shoplistNameStyle}>{shoplistName}</Text>
         <View style={styles.displayContainer}>
           <FlatList

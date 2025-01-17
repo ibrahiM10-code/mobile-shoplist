@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import FormInput from "./FormInput";
 
@@ -15,6 +9,7 @@ const ProductInputs = ({
   data,
   fn,
   btnAction,
+  refValue,
 }) => {
   const action = () => {
     btnAction();
@@ -27,15 +22,16 @@ const ProductInputs = ({
         inputTitle={"Product Name"}
         value={data.name}
         setValue={(value) => fn("name", value)}
+        ref={refValue}
       />
       <FormInput
         inputTitle={"Quantity"}
-        value={data.quantity.toString()}
+        // value={data.quantity.toString()}
         setValue={(value) => fn("quantity", value)}
       />
       <FormInput
         inputTitle={"Price"}
-        value={data.price.toString()}
+        // value={data.price.toString()}
         setValue={(value) => fn("price", value)}
       />
       {showAsModal && (

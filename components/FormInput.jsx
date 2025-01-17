@@ -1,7 +1,7 @@
 import { View, Text, TextInput, StyleSheet } from "react-native";
-import React from "react";
+import React, { forwardRef } from "react";
 
-const FormInput = ({ inputTitle, value, setValue }) => {
+const FormInput = forwardRef(({ inputTitle, value, setValue }, ref) => {
   return (
     <View style={styles.inputContainer}>
       <Text style={styles.inputTitleStyle}>{inputTitle}</Text>
@@ -14,10 +14,11 @@ const FormInput = ({ inputTitle, value, setValue }) => {
         }
         value={value}
         onChangeText={setValue}
+        ref={ref}
       />
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   inputContainer: {

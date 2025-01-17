@@ -3,12 +3,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import ProductInputs from "../../components/ProductInputs";
 import ShoplistContext from "../../context/ShoplistProvider";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import axios from "axios";
 
 const AddProducts = () => {
   const { shoplistName } = useContext(ShoplistContext);
   const [productDetails, setProductDetails] = useState([]);
+  const nameInput = useRef(null);
+  // const quantityInput = useRef(null);
+  // const priceInput = useRef(null);
   const [productData, setProductData] = useState({
     name: "",
     quantity: 0,
@@ -20,6 +23,7 @@ const AddProducts = () => {
       return [...prevProduct, productData];
     });
     console.log("Added! to ", shoplistName);
+    clearInputs();
   };
 
   const handleProductInfo = (name, value) => {
@@ -29,6 +33,11 @@ const AddProducts = () => {
         [name]: value,
       };
     });
+  };
+
+  const clearInputs = () => {
+    setProductData({ name: "", quantity: 0, price: 0 });
+    nameInput.current?.focus();
   };
 
   const dataPayload = () => {
@@ -80,7 +89,11 @@ const AddProducts = () => {
       <View style={styles.addProductsWrapper}>
         <View style={styles.addProductsContainer}>
           <Text style={styles.textStyle}>Add products to {shoplistName}</Text>
-          <ProductInputs data={productData} fn={handleProductInfo} />
+          <ProductInputs
+            data={productData}
+            fn={handleProductInfo}
+            refValue={nameInput}
+          />
           <View style={styles.addProductsBtnContainer}>
             <TouchableOpacity
               style={styles.addProductsBtn}

@@ -19,13 +19,14 @@ const HomeScreen = () => {
           `http://192.168.0.8:3001/api/shoplists`
         );
         const data = response.data;
-        if (response.status === 404) {
-          setShoplists([]);
-        } else {
+        console.log(data);
+        if (response.status === 200) {
           setShoplists(data);
         }
       } catch (error) {
-        console.error(error.message);
+        if (error.status === 404) {
+          setShoplists([]);
+        }
       }
     };
     getAllShoplists();
