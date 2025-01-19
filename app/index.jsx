@@ -1,7 +1,14 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useState, useContext } from "react";
 import { router } from "expo-router";
+import { apiUrl } from "../helpers/apiUrl";
 import ShoplistContext from "../context/ShoplistProvider";
 import Shoplist from "../components/Shoplist";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -11,13 +18,12 @@ import "../styles.css";
 const HomeScreen = () => {
   const [shoplists, setShoplists] = useState([]);
   const { reload, setReload } = useContext(ShoplistContext);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getAllShoplists = async () => {
       try {
-        const response = await axios.get(
-          `http://192.168.0.8:3001/api/shoplists`
-        );
+        const response = await axios.get(`${apiUrl}/shoplists`);
         const data = response.data;
         console.log(data);
         if (response.status === 200) {
@@ -27,6 +33,8 @@ const HomeScreen = () => {
         if (error.status === 404) {
           setShoplists([]);
         }
+      } finally {
+        setLoading(false);
       }
     };
     getAllShoplists();
@@ -35,7 +43,10 @@ const HomeScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.homeWrapper}>
         <View style={styles.homeContainer}>
-          {shoplists.length > 0 &&
+          {loading ? (
+            <ActivityIndicator size={"small"} color={"#93B1A6"} />
+          ) : (
+            shoplists.length > 0 &&
             shoplists.map((shoplist, index) => (
               <Shoplist
                 name={shoplist.name}
@@ -44,7 +55,8 @@ const HomeScreen = () => {
                 reload={reload}
                 setReload={setReload}
               />
-            ))}
+            ))
+          )}
           <Text style={styles.textStyle}>Add a new shoplist</Text>
           <TouchableOpacity>
             <AntDesign

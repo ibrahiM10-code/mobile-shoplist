@@ -4,12 +4,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
 import axios from "axios";
 import React from "react";
+import { apiUrl } from "../helpers/apiUrl";
 
 const Shoplist = ({ name, shoplistId, setReload, reload }) => {
   const deleteShoplist = async () => {
     try {
       const response = await axios.delete(
-        `http://192.168.0.8:3001/api/delete-shoplist/${shoplistId}`
+        `${apiUrl}/delete-shoplist/${shoplistId}`
       );
       if (response.status === 200) {
         console.log(`The ${name} shoplist has been deleted.`);

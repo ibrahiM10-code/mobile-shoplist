@@ -1,22 +1,36 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
+import { apiUrl } from "../../helpers/apiUrl";
 import ProductInputs from "../../components/ProductInputs";
 import ShoplistContext from "../../context/ShoplistProvider";
 import React, { useContext, useState, useRef } from "react";
 import axios from "axios";
+import { Audio } from "expo-av";
 
 const AddProducts = () => {
   const { shoplistName } = useContext(ShoplistContext);
   const [productDetails, setProductDetails] = useState([]);
+  const [sound, setSound] = useState();
   const nameInput = useRef(null);
-  // const quantityInput = useRef(null);
-  // const priceInput = useRef(null);
   const [productData, setProductData] = useState({
     name: "",
     quantity: 0,
     price: 0,
   });
+
+  async function playSound() {
+    try {
+      const { sound } = await Audio.Sound.createAsync(
+        require("../../sounds/click-button.mp3"),
+        { shouldPlay: true }
+      );
+      setSound(sound);
+      await sound.playAsync();
+    } catch (error) {
+      console.error("Error loading or playing sound:", error);
+    }
+  }
 
   const setDetails = () => {
     setProductDetails((prevProduct) => {
@@ -24,6 +38,7 @@ const AddProducts = () => {
     });
     console.log("Added! to ", shoplistName);
     clearInputs();
+    playSound();
   };
 
   const handleProductInfo = (name, value) => {
@@ -36,7 +51,7 @@ const AddProducts = () => {
   };
 
   const clearInputs = () => {
-    setProductData({ name: "", quantity: 0, price: 0 });
+    setProductData({ name: "", quantity: "", price: "" });
     nameInput.current?.focus();
   };
 
@@ -69,10 +84,7 @@ const AddProducts = () => {
   const addNewShoplist = async () => {
     try {
       const data = dataPayload();
-      const response = await axios.post(
-        "http://192.168.0.8:3001/api/add-shoplist",
-        data
-      );
+      const response = await axios.post(`${apiUrl}/add-shoplist`, data);
       if (response.status === 201) {
         console.log("Shoplist created successfully!");
         router.push("/productsList/" + shoplistName);

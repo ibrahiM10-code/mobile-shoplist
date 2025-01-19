@@ -34,12 +34,14 @@
         }
       ],
       [
-
         "expo-font",
         {
-          "fonts": ["./assets/fonts/"]
+          "fonts": [
+            "./assets/fonts/"
+          ]
         }
-      ]
+      ],
+      "expo-audio"
     ],
     "experiments": {
       "typedRoutes": true

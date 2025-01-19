@@ -25,19 +25,27 @@ const ProductInputs = ({
         ref={refValue}
       />
       <FormInput
-        inputTitle={"Quantity"}
-        // value={data.quantity.toString()}
+        inputTitle={title === "Update product" ? "New Quantity" : "Quantity"}
+        value={data.quantity.toString()}
         setValue={(value) => fn("quantity", value)}
       />
       <FormInput
-        inputTitle={"Price"}
-        // value={data.price.toString()}
+        inputTitle={title === "Update product" ? "New Price" : "Price"}
+        value={data.price.toString()}
         setValue={(value) => fn("price", value)}
       />
       {showAsModal && (
-        <TouchableOpacity style={styles.addProductsBtn} onPress={action}>
-          <Text style={styles.btnText}>{title}</Text>
-        </TouchableOpacity>
+        <View style={styles.btnsContainer}>
+          <TouchableOpacity style={styles.addProductsBtn} onPress={action}>
+            <Text style={styles.btnText}>{title}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.addProductsBtn}
+            onPress={() => setModal(!showAsModal)}
+          >
+            <Text style={styles.btnText}>Discard changes</Text>
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );
@@ -45,27 +53,41 @@ const ProductInputs = ({
 
 const styles = StyleSheet.create({
   positioning: {
-    position: "absolute",
-    backgroundColor: "#040D12",
-    width: "90%",
-    padding: 20,
-    left: 17,
-    bottom: 25,
+    position: "relative",
+    backgroundColor: "#5C8374",
+    // width: "90%",
+    // padding: 15,
+    // paddingTop: 15,
+    // paddingBottom: 15,
+    // paddingLeft: 20,
+    // paddingRight: 20,
+    paddingTop: 15,
+    paddingBottom: 15,
+    paddingLeft: 25,
+    paddingRight: 25,
+    width: "95%",
+    left: 7,
+    bottom: 10,
     borderRadius: 10,
     zIndex: 1,
   },
   addProductsBtn: {
-    backgroundColor: "#93B1A6",
+    backgroundColor: "#183D3D",
     borderRadius: 10,
     padding: 10,
-    width: "50%",
-    marginTop: 10,
+    width: "40%",
   },
   btnText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 13,
     textAlign: "center",
     fontFamily: "Outfit-Medium",
+  },
+  btnsContainer: {
+    paddingTop: 8,
+    paddingBottom: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 

@@ -4,6 +4,8 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  KeyboardAvoidingView,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -15,12 +17,14 @@ import React, { useState, useEffect, useContext } from "react";
 import CustomBackHandler from "../../components/BackHandler";
 import { uid } from "uid";
 import axios from "axios";
+import { apiUrl } from "../../helpers/apiUrl";
 
 const DisplayShoplist = () => {
   const { shoplistName } = useLocalSearchParams();
   const { reload, setReload } = useContext(ShoplistContext);
   const [isShown, setIsShown] = useState(false);
   const [title, setTitle] = useState("");
+  const [loading, setLoading] = useState(true);
   const [shoplistContent, setShoplistContent] = useState([]);
   const [productData, setProductData] = useState({
     name: "",
@@ -33,9 +37,7 @@ const DisplayShoplist = () => {
     const getShoplistContent = async () => {
       console.log(shoplistName);
       try {
-        const response = await axios.get(
-          `http://192.168.0.8:3001/api/shoplist/${shoplistName}`
-        );
+        const response = await axios.get(`${apiUrl}/shoplist/${shoplistName}`);
         if (response.status === 200) {
           setShoplistContent(response.data);
           console.log("Shoplist loaded!");
@@ -47,6 +49,8 @@ const DisplayShoplist = () => {
             error
           );
         }
+      } finally {
+        setLoading(false);
       }
     };
     getShoplistContent();
@@ -81,6 +85,7 @@ const DisplayShoplist = () => {
     );
     shoplistContent[0].price[productData.index] = parseInt(productData.price);
     const total = updateSubTotal();
+    console.log(productData);
     const updateContent = {
       quantity: shoplistContent[0].quantity,
       price: shoplistContent[0].price,
@@ -94,7 +99,7 @@ const DisplayShoplist = () => {
     console.log(updateContent);
     try {
       const response = await axios.put(
-        `http://192.168.0.8:3001/api/update-shoplist/${shoplistContent[0]._id}`,
+        `${apiUrl}/update-shoplist/${shoplistContent[0]._id}`,
         updateContent
       );
       if (response.status === 200) {
@@ -104,7 +109,6 @@ const DisplayShoplist = () => {
           subTotal: updateContent.subTotal,
         }));
         setReload(!reload);
-        console.log(shoplistContent);
         console.log(response.data);
       }
     } catch (error) {
@@ -123,7 +127,7 @@ const DisplayShoplist = () => {
       }));
       shoplistContent[0].subTotal = updateSubTotal();
       const response = await axios.put(
-        `http://192.168.0.8:3001/api/shoplist/${shoplistName}/${index}`,
+        `${apiUrl}/shoplist/${shoplistName}/${index}`,
         { subTotal: shoplistContent[0].subTotal }
       );
       if (response.status === 200) {
@@ -144,34 +148,47 @@ const DisplayShoplist = () => {
     setTitle("Add new product");
   };
   return (
+    //<KeyboardAvoidingView behavior="height" style={styles.container}>
     <SafeAreaView style={isShown ? styles.containerOpacity : styles.container}>
       <View style={styles.displayWrapper}>
         <CustomBackHandler />
         <Text style={styles.shoplistNameStyle}>{shoplistName}</Text>
-        <View style={styles.displayContainer}>
-          <FlatList
-            style={styles.flatList}
-            data={shoplistContent}
-            renderItem={({ item }) => (
-              <ProductDetails
-                details={item}
-                showAsModal={isShown}
-                setModal={setIsShown}
-                setTitle={setTitle}
-                setProductData={setProductData}
-                productData={productData}
-                shoplistName={shoplistName}
-                removeProduct={removeProduct}
-                key={uid()}
-              />
-            )}
-            keyExtractor={(item) => item._id}
-            ListFooterComponent={
-              <TouchableOpacity style={styles.addMoreBtn} onPress={showForm}>
-                <AntDesign name="plussquare" size={35} color="#93B1A6" />
-              </TouchableOpacity>
-            }
-          />
+        <View
+          style={
+            isShown ? styles.displayContainerHidden : styles.displayContainer
+          }
+        >
+          {loading ? (
+            <ActivityIndicator
+              size={"large"}
+              color={"#93B1A6"}
+              style={styles.loading}
+            />
+          ) : (
+            <FlatList
+              style={styles.flatList}
+              data={shoplistContent}
+              renderItem={({ item }) => (
+                <ProductDetails
+                  details={item}
+                  showAsModal={isShown}
+                  setModal={setIsShown}
+                  setTitle={setTitle}
+                  setProductData={setProductData}
+                  productData={productData}
+                  shoplistName={shoplistName}
+                  removeProduct={removeProduct}
+                  key={uid()}
+                />
+              )}
+              keyExtractor={(item) => item._id}
+              ListFooterComponent={
+                <TouchableOpacity style={styles.addMoreBtn} onPress={showForm}>
+                  <AntDesign name="plussquare" size={35} color="#93B1A6" />
+                </TouchableOpacity>
+              }
+            />
+          )}
           {isShown && (
             <ProductInputs
               showAsModal={isShown}
@@ -192,6 +209,7 @@ const DisplayShoplist = () => {
         )}
       </View>
     </SafeAreaView>
+    // </KeyboardAvoidingView>
   );
 };
 
@@ -216,6 +234,13 @@ const styles = StyleSheet.create({
     position: "relative",
     width: "80%",
   },
+  displayContainerHidden: {
+    backgroundColor: "#040D12",
+    borderRadius: 10,
+    height: "50%",
+    position: "relative",
+    width: "80%",
+  },
   addMoreBtn: {
     alignSelf: "center",
     paddingTop: 15,
@@ -227,6 +252,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 20,
     fontFamily: "Outfit-Bold",
+  },
+  loading: {
+    alignSelf: "center",
   },
 });
 

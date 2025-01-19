@@ -8,7 +8,10 @@ const FormInput = forwardRef(({ inputTitle, value, setValue }, ref) => {
       <TextInput
         style={styles.inputTypeStyle}
         inputMode={
-          inputTitle === "Price" || inputTitle === "Quantity"
+          inputTitle === "Price" ||
+          inputTitle === "Quantity" ||
+          inputTitle === "New Price" ||
+          inputTitle === "New Quantity"
             ? "numeric"
             : "text"
         }
