@@ -1,1 +1,1 @@
-export const apiUrl = "http://192.168.0.10:3001/api";
+export const apiUrl = "https://shoplist-xriw.onrender.com/api";

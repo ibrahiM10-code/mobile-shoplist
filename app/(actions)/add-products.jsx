@@ -1,17 +1,16 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useContext, useState, useRef } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { apiUrl } from "../../helpers/apiUrl";
+import { showToast } from "../../helpers/popToast";
 import ProductInputs from "../../components/ProductInputs";
 import ShoplistContext from "../../context/ShoplistProvider";
-import React, { useContext, useState, useRef } from "react";
 import axios from "axios";
-import { Audio } from "expo-av";
 
 const AddProducts = () => {
   const { shoplistName } = useContext(ShoplistContext);
   const [productDetails, setProductDetails] = useState([]);
-  const [sound, setSound] = useState();
   const nameInput = useRef(null);
   const [productData, setProductData] = useState({
     name: "",
@@ -19,26 +18,13 @@ const AddProducts = () => {
     price: 0,
   });
 
-  async function playSound() {
-    try {
-      const { sound } = await Audio.Sound.createAsync(
-        require("../../sounds/click-button.mp3"),
-        { shouldPlay: true }
-      );
-      setSound(sound);
-      await sound.playAsync();
-    } catch (error) {
-      console.error("Error loading or playing sound:", error);
-    }
-  }
-
-  const setDetails = () => {
+  const setDetails = async () => {
     setProductDetails((prevProduct) => {
       return [...prevProduct, productData];
     });
     console.log("Added! to ", shoplistName);
     clearInputs();
-    playSound();
+    showToast("Product added!");
   };
 
   const handleProductInfo = (name, value) => {
@@ -77,7 +63,6 @@ const AddProducts = () => {
       price: pricesArray,
       subTotal: total,
     };
-    console.log(shoplistData);
     return shoplistData;
   };
 
@@ -86,7 +71,6 @@ const AddProducts = () => {
       const data = dataPayload();
       const response = await axios.post(`${apiUrl}/add-shoplist`, data);
       if (response.status === 201) {
-        console.log("Shoplist created successfully!");
         router.push("/productsList/" + shoplistName);
       }
     } catch (error) {

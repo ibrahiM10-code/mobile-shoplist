@@ -4,7 +4,6 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
-  KeyboardAvoidingView,
   ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,6 +16,7 @@ import React, { useState, useEffect, useContext } from "react";
 import CustomBackHandler from "../../components/BackHandler";
 import { uid } from "uid";
 import axios from "axios";
+import { showToast } from "../../helpers/popToast";
 import { apiUrl } from "../../helpers/apiUrl";
 
 const DisplayShoplist = () => {
@@ -35,12 +35,10 @@ const DisplayShoplist = () => {
 
   useEffect(() => {
     const getShoplistContent = async () => {
-      console.log(shoplistName);
       try {
         const response = await axios.get(`${apiUrl}/shoplist/${shoplistName}`);
         if (response.status === 200) {
           setShoplistContent(response.data);
-          console.log("Shoplist loaded!");
         }
       } catch (error) {
         if (error.status === 404) {
@@ -85,7 +83,6 @@ const DisplayShoplist = () => {
     );
     shoplistContent[0].price[productData.index] = parseInt(productData.price);
     const total = updateSubTotal();
-    console.log(productData);
     const updateContent = {
       quantity: shoplistContent[0].quantity,
       price: shoplistContent[0].price,
@@ -96,49 +93,66 @@ const DisplayShoplist = () => {
 
   const updateProduct = async () => {
     const updateContent = prepUpdate();
-    console.log(updateContent);
     try {
+      setLoading(true);
       const response = await axios.put(
         `${apiUrl}/update-shoplist/${shoplistContent[0]._id}`,
         updateContent
       );
+      console.log(response.status);
       if (response.status === 200) {
-        console.log("Update succesful.");
-        setShoplistContent((prev) => ({
-          ...prev,
-          subTotal: updateContent.subTotal,
-        }));
-        setReload(!reload);
-        console.log(response.data);
+        setShoplistContent((prev) => {
+          const updatedContent = [...prev];
+          updatedContent[0].subTotal = updateContent.subTotal;
+          return updatedContent;
+        });
+        console.log(shoplistContent);
+        showToast("Product updated!");
       }
     } catch (error) {
       if (error.status === 404) {
-        console.log("Error while updating.");
+        console.error("Error while updating.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   const removeProduct = async (index) => {
     try {
-      setShoplistContent(() => ({
-        products: shoplistContent[0].products.splice(index, 1),
-        quantity: shoplistContent[0].quantity.splice(index, 1),
-        price: shoplistContent[0].price.splice(index, 1),
-      }));
-      shoplistContent[0].subTotal = updateSubTotal();
+      setShoplistContent((prev) => {
+        const updatedProducts = [...prev[0].products]; // Create a copy of the products array
+        const updatedQuantities = [...prev[0].quantity]; // Create a copy of the quantity array
+        const updatedPrices = [...prev[0].price]; // Create a copy of the price array
+
+        // Remove the specific item using splice
+        updatedProducts.splice(index, 1);
+        updatedQuantities.splice(index, 1);
+        updatedPrices.splice(index, 1);
+
+        // Return the updated state
+        return [
+          {
+            ...prev[0], // Keep all other properties unchanged
+            products: updatedProducts,
+            quantity: updatedQuantities,
+            price: updatedPrices,
+            subTotal: updateSubTotal(),
+          },
+        ];
+      });
       const response = await axios.put(
         `${apiUrl}/shoplist/${shoplistName}/${index}`,
         { subTotal: shoplistContent[0].subTotal }
       );
+      console.log(response);
       if (response.status === 200) {
-        console.log("Product removed succesfully!");
-        console.log(response.data);
-        setReload(!reload);
-        console.log(shoplistContent);
+        //setReload(!reload);
+        showToast("Product removed!");
       }
     } catch (error) {
       if (error.status === 400) {
-        console.log("There has been an error. ", error);
+        console.error("There has been an error. ", error);
       }
     }
   };
@@ -152,43 +166,49 @@ const DisplayShoplist = () => {
     <SafeAreaView style={isShown ? styles.containerOpacity : styles.container}>
       <View style={styles.displayWrapper}>
         <CustomBackHandler />
-        <Text style={styles.shoplistNameStyle}>{shoplistName}</Text>
+        {loading ? (
+          <Text style={styles.shoplistNameStyle}>Loading {shoplistName}</Text>
+        ) : (
+          <Text style={styles.shoplistNameStyle}>{shoplistName}</Text>
+        )}
         <View
           style={
             isShown ? styles.displayContainerHidden : styles.displayContainer
           }
         >
-          {loading ? (
-            <ActivityIndicator
-              size={"large"}
-              color={"#93B1A6"}
-              style={styles.loading}
-            />
-          ) : (
-            <FlatList
-              style={styles.flatList}
-              data={shoplistContent}
-              renderItem={({ item }) => (
-                <ProductDetails
-                  details={item}
-                  showAsModal={isShown}
-                  setModal={setIsShown}
-                  setTitle={setTitle}
-                  setProductData={setProductData}
-                  productData={productData}
-                  shoplistName={shoplistName}
-                  removeProduct={removeProduct}
-                  key={uid()}
+          <FlatList
+            style={styles.flatList}
+            data={shoplistContent}
+            renderItem={({ item }) => (
+              <ProductDetails
+                details={item}
+                showAsModal={isShown}
+                setModal={setIsShown}
+                setTitle={setTitle}
+                setProductData={setProductData}
+                productData={productData}
+                shoplistName={shoplistName}
+                removeProduct={removeProduct}
+                key={uid()}
+              />
+            )}
+            keyExtractor={(item) => item._id.toString()}
+            extraData={shoplistContent}
+            ListFooterComponent={
+              loading ? (
+                <ActivityIndicator
+                  style={styles.addMoreBtn}
+                  size={"large"}
+                  color={"#93B1A6"}
                 />
-              )}
-              keyExtractor={(item) => item._id}
-              ListFooterComponent={
+              ) : (
                 <TouchableOpacity style={styles.addMoreBtn} onPress={showForm}>
                   <AntDesign name="plussquare" size={35} color="#93B1A6" />
                 </TouchableOpacity>
-              }
-            />
-          )}
+              )
+            }
+          />
+
           {isShown && (
             <ProductInputs
               showAsModal={isShown}
@@ -200,7 +220,9 @@ const DisplayShoplist = () => {
             />
           )}
         </View>
-        {shoplistContent.length > 0 ? (
+        {loading ? (
+          <Text style={styles.shoplistNameStyle}>Loading Total</Text>
+        ) : shoplistContent.length > 0 ? (
           <Text style={styles.shoplistNameStyle}>
             Total: ${shoplistContent[0].subTotal}
           </Text>

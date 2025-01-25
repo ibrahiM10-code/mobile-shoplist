@@ -13,7 +13,6 @@ const ProductInputs = ({
 }) => {
   const action = () => {
     btnAction();
-    console.log("Executed");
     setModal(!showAsModal);
   };
   return (
@@ -55,12 +54,6 @@ const styles = StyleSheet.create({
   positioning: {
     position: "relative",
     backgroundColor: "#5C8374",
-    // width: "90%",
-    // padding: 15,
-    // paddingTop: 15,
-    // paddingBottom: 15,
-    // paddingLeft: 20,
-    // paddingRight: 20,
     paddingTop: 15,
     paddingBottom: 15,
     paddingLeft: 25,

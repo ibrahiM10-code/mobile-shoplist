@@ -13,7 +13,7 @@ import ShoplistContext from "../context/ShoplistProvider";
 import Shoplist from "../components/Shoplist";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import axios from "axios";
-import "../styles.css";
+import * as Burnt from "burnt";
 
 const HomeScreen = () => {
   const [shoplists, setShoplists] = useState([]);
@@ -25,7 +25,6 @@ const HomeScreen = () => {
       try {
         const response = await axios.get(`${apiUrl}/shoplists`);
         const data = response.data;
-        console.log(data);
         if (response.status === 200) {
           setShoplists(data);
         }

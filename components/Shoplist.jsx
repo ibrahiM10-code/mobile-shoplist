@@ -5,6 +5,7 @@ import { Link } from "expo-router";
 import axios from "axios";
 import React from "react";
 import { apiUrl } from "../helpers/apiUrl";
+import { showToast } from "../helpers/popToast";
 
 const Shoplist = ({ name, shoplistId, setReload, reload }) => {
   const deleteShoplist = async () => {
@@ -14,6 +15,7 @@ const Shoplist = ({ name, shoplistId, setReload, reload }) => {
       );
       if (response.status === 200) {
         console.log(`The ${name} shoplist has been deleted.`);
+        showToast("Shopping list removed!");
         setReload(!reload);
       }
     } catch (error) {
