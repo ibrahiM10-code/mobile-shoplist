@@ -36,7 +36,7 @@ const ProductDetails = ({
               <TouchableOpacity
                 onPress={() =>
                   showForm(
-                    product,
+                    details.products[index],
                     details.quantity[index],
                     details.price[index],
                     index

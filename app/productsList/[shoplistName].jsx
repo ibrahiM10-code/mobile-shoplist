@@ -82,8 +82,10 @@ const DisplayShoplist = () => {
       productData.quantity
     );
     shoplistContent[0].price[productData.index] = parseInt(productData.price);
+    shoplistContent[0].products[productData.index] = productData.name;
     const total = updateSubTotal();
     const updateContent = {
+      products: shoplistContent[0].products,
       quantity: shoplistContent[0].quantity,
       price: shoplistContent[0].price,
       subTotal: total,
@@ -145,7 +147,6 @@ const DisplayShoplist = () => {
         `${apiUrl}/shoplist/${shoplistName}/${index}`,
         { subTotal: shoplistContent[0].subTotal }
       );
-      console.log(response);
       if (response.status === 200) {
         //setReload(!reload);
         showToast("Product removed!");
@@ -162,7 +163,6 @@ const DisplayShoplist = () => {
     setTitle("Add new product");
   };
   return (
-    //<KeyboardAvoidingView behavior="height" style={styles.container}>
     <SafeAreaView style={isShown ? styles.containerOpacity : styles.container}>
       <View style={styles.displayWrapper}>
         <CustomBackHandler />
@@ -231,7 +231,6 @@ const DisplayShoplist = () => {
         )}
       </View>
     </SafeAreaView>
-    // </KeyboardAvoidingView>
   );
 };
 
