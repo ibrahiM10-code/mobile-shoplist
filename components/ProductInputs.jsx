@@ -8,11 +8,16 @@ const ProductInputs = ({
   title,
   data,
   fn,
-  btnAction,
+  updateFn,
+  addProductFn,
   refValue,
 }) => {
   const action = () => {
-    btnAction();
+    if (title === "Update product") {
+      updateFn();
+    } else if (title === "Add new product") {
+      addProductFn();
+    }
     setModal(!showAsModal);
   };
   return (

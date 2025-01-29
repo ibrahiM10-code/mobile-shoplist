@@ -18,7 +18,7 @@ const AddShoplist = () => {
       <View style={styles.addShoplistWrapper}>
         <View style={styles.addShoplistContainer}>
           <FormInput
-            inputTitle={"Name your new shoplist"}
+            inputTitle={"Name your new shopping list"}
             value={newShoplist}
             setValue={setNewShoplist}
           />
@@ -26,7 +26,7 @@ const AddShoplist = () => {
             style={styles.addShoplistBtn}
             onPress={handleOnPress}
           >
-            <Text style={styles.btnText}>Add new shoplist</Text>
+            <Text style={styles.btnText}>Add new shopping list</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 15,
     textAlign: "center",
     fontFamily: "Outfit-Bold",
   },

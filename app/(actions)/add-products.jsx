@@ -75,7 +75,7 @@ const AddProducts = () => {
       }
     } catch (error) {
       if (error.status === 400) {
-        console.error("Failed to create the shoplist.", error);
+        console.error("Failed to create the shopping list.", error);
       }
     }
   };
@@ -101,7 +101,7 @@ const AddProducts = () => {
               style={styles.addProductsBtn}
               onPress={addNewShoplist}
             >
-              <Text style={styles.btnText}>Finish Shoplist</Text>
+              <Text style={styles.btnText}>Finish Shopping list</Text>
             </TouchableOpacity>
           </View>
         </View>

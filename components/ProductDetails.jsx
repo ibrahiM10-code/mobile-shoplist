@@ -18,6 +18,7 @@ const ProductDetails = ({
     setModal(!showAsModal);
     setTitle("Update product");
     setProductData({ name, quantity, price, index });
+    console.log(index);
   };
 
   return (
@@ -79,16 +80,14 @@ const styles = StyleSheet.create({
   },
   productQuantityText: {
     color: "white",
-    fontSize: 15,
+    fontSize: 12,
+    marginTop: 3,
     fontFamily: "Outfit-Regular",
   },
   productPrice: {
     color: "white",
     fontSize: 20,
-    // alignSelf: "",
     fontFamily: "Outfit-Medium",
-    // position: "absolute",
-    // left: 160,
   },
   actionsContainer: {
     padding: 10,

@@ -43,7 +43,7 @@ const HomeScreen = () => {
       <View style={styles.homeWrapper}>
         <View style={styles.homeContainer}>
           {loading ? (
-            <ActivityIndicator size={"small"} color={"#93B1A6"} />
+            <ActivityIndicator size={"large"} color={"#93B1A6"} />
           ) : (
             shoplists.length > 0 &&
             shoplists.map((shoplist, index) => (
@@ -56,7 +56,7 @@ const HomeScreen = () => {
               />
             ))
           )}
-          <Text style={styles.textStyle}>Add a new shoplist</Text>
+          <Text style={styles.textStyle}>Add a new shopping list</Text>
           <TouchableOpacity>
             <AntDesign
               name="plussquare"

@@ -11,8 +11,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { useLocalSearchParams } from "expo-router";
 import ProductDetails from "../../components/ProductDetails";
 import ProductInputs from "../../components/ProductInputs";
-import ShoplistContext from "../../context/ShoplistProvider";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import CustomBackHandler from "../../components/BackHandler";
 import { uid } from "uid";
 import axios from "axios";
@@ -21,7 +20,6 @@ import { apiUrl } from "../../helpers/apiUrl";
 
 const DisplayShoplist = () => {
   const { shoplistName } = useLocalSearchParams();
-  const { reload, setReload } = useContext(ShoplistContext);
   const [isShown, setIsShown] = useState(false);
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(true);
@@ -52,7 +50,7 @@ const DisplayShoplist = () => {
       }
     };
     getShoplistContent();
-  }, [reload]);
+  }, []);
 
   const handleProductInfo = (name, value) => {
     setProductData((prevProduct) => {
@@ -82,10 +80,8 @@ const DisplayShoplist = () => {
       productData.quantity
     );
     shoplistContent[0].price[productData.index] = parseInt(productData.price);
-    shoplistContent[0].products[productData.index] = productData.name;
     const total = updateSubTotal();
     const updateContent = {
-      products: shoplistContent[0].products,
       quantity: shoplistContent[0].quantity,
       price: shoplistContent[0].price,
       subTotal: total,
@@ -93,15 +89,46 @@ const DisplayShoplist = () => {
     return updateContent;
   };
 
+  const addProduct = async () => {
+    shoplistContent[0].products.push(productData.name);
+    shoplistContent[0].price.push(parseInt(productData.price));
+    shoplistContent[0].quantity.push(parseInt(productData.quantity));
+    const newProductContent = {
+      products: shoplistContent[0].products,
+      quantity: shoplistContent[0].quantity,
+      price: shoplistContent[0].price,
+      subTotal: updateSubTotal(),
+    };
+    try {
+      const response = await axios.put(
+        `${apiUrl}/update-shoplist/${shoplistContent[0]._id}`,
+        newProductContent
+      );
+      if (response.status === 200) {
+        setShoplistContent((prev) => {
+          const newContent = [...prev];
+          newContent[0].subTotal = newProductContent.subTotal;
+          return newContent;
+        });
+        console.log(shoplistContent);
+        showToast("Product updated!");
+      }
+    } catch (error) {
+      if (error.status === 404) {
+        console.error("Error while updating.");
+      }
+    }
+  };
+
   const updateProduct = async () => {
     const updateContent = prepUpdate();
+    console.log(updateContent);
     try {
       setLoading(true);
       const response = await axios.put(
         `${apiUrl}/update-shoplist/${shoplistContent[0]._id}`,
         updateContent
       );
-      console.log(response.status);
       if (response.status === 200) {
         setShoplistContent((prev) => {
           const updatedContent = [...prev];
@@ -123,32 +150,19 @@ const DisplayShoplist = () => {
   const removeProduct = async (index) => {
     try {
       setShoplistContent((prev) => {
-        const updatedProducts = [...prev[0].products]; // Create a copy of the products array
-        const updatedQuantities = [...prev[0].quantity]; // Create a copy of the quantity array
-        const updatedPrices = [...prev[0].price]; // Create a copy of the price array
+        const removeProducts = [...prev];
+        removeProducts[0].products.splice(index, 1);
+        removeProducts[0].quantity.splice(index, 1);
+        removeProducts[0].price.splice(index, 1);
+        removeProducts[0].subTotal = updateSubTotal();
 
-        // Remove the specific item using splice
-        updatedProducts.splice(index, 1);
-        updatedQuantities.splice(index, 1);
-        updatedPrices.splice(index, 1);
-
-        // Return the updated state
-        return [
-          {
-            ...prev[0], // Keep all other properties unchanged
-            products: updatedProducts,
-            quantity: updatedQuantities,
-            price: updatedPrices,
-            subTotal: updateSubTotal(),
-          },
-        ];
+        return removeProducts;
       });
       const response = await axios.put(
         `${apiUrl}/shoplist/${shoplistName}/${index}`,
         { subTotal: shoplistContent[0].subTotal }
       );
       if (response.status === 200) {
-        //setReload(!reload);
         showToast("Product removed!");
       }
     } catch (error) {
@@ -215,7 +229,8 @@ const DisplayShoplist = () => {
               setModal={setIsShown}
               title={title}
               data={productData}
-              btnAction={updateProduct}
+              updateFn={updateProduct}
+              addProductFn={addProduct}
               fn={handleProductInfo}
             />
           )}
