@@ -80,8 +80,10 @@ const DisplayShoplist = () => {
       productData.quantity
     );
     shoplistContent[0].price[productData.index] = parseInt(productData.price);
+    shoplistContent[0].products[productData.index] = productData.name;
     const total = updateSubTotal();
     const updateContent = {
+      products: shoplistContent[0].products,
       quantity: shoplistContent[0].quantity,
       price: shoplistContent[0].price,
       subTotal: total,
@@ -122,7 +124,6 @@ const DisplayShoplist = () => {
 
   const updateProduct = async () => {
     const updateContent = prepUpdate();
-    console.log(updateContent);
     try {
       setLoading(true);
       const response = await axios.put(

@@ -18,7 +18,6 @@ const ProductDetails = ({
     setModal(!showAsModal);
     setTitle("Update product");
     setProductData({ name, quantity, price, index });
-    console.log(index);
   };
 
   return (

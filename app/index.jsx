@@ -13,7 +13,7 @@ import ShoplistContext from "../context/ShoplistProvider";
 import Shoplist from "../components/Shoplist";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import axios from "axios";
-import * as Burnt from "burnt";
+import ExitHandler from "../components/ExitHandler";
 
 const HomeScreen = () => {
   const [shoplists, setShoplists] = useState([]);
@@ -40,8 +40,12 @@ const HomeScreen = () => {
   }, [reload]);
   return (
     <SafeAreaView style={styles.container}>
+      <ExitHandler />
       <View style={styles.homeWrapper}>
         <View style={styles.homeContainer}>
+          {shoplists.length > 0 && (
+            <Text style={styles.titleStyle}>My shopping lists</Text>
+          )}
           {loading ? (
             <ActivityIndicator size={"large"} color={"#93B1A6"} />
           ) : (
@@ -95,6 +99,13 @@ const styles = StyleSheet.create({
     fontSize: 25,
     marginBottom: 10,
     fontFamily: "Outfit-Regular",
+  },
+  titleStyle: {
+    color: "white",
+    fontSize: 16,
+    marginBottom: 10,
+    fontFamily: "Outfit-Regular",
+    textAlign: "left",
   },
 });
 

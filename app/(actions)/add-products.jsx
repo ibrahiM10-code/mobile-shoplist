@@ -22,7 +22,7 @@ const AddProducts = () => {
     setProductDetails((prevProduct) => {
       return [...prevProduct, productData];
     });
-    console.log("Added! to ", shoplistName);
+    // console.log("Added! to ", shoplistName);
     clearInputs();
     showToast("Product added!");
   };
