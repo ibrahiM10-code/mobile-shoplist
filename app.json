@@ -4,7 +4,7 @@
     "slug": "mobile-shoplist",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/favicon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,9 +13,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/favicon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ibrahim10.mobileshoplist"
     },
     "web": {
       "bundler": "metro",
@@ -27,7 +28,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/favicon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
@@ -44,6 +45,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "fe39a487-f892-44e4-a4c2-aa1ef666382a"
+      }
     }
   }
 }

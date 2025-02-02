@@ -14,6 +14,7 @@ const ProductInputs = ({
 }) => {
   const action = () => {
     if (title === "Update product") {
+      // Update accordingly to the changes on [shoplistName].jsx
       updateFn();
     } else if (title === "Add new product") {
       addProductFn();

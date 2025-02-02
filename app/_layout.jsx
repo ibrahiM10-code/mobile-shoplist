@@ -2,6 +2,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { Stack, View } from "expo-router";
 import { useFonts } from "expo-font";
 import { ShoplistProvider } from "../context/ShoplistProvider";
+import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 
 SplashScreen.preventAutoHideAsync();
@@ -33,6 +34,7 @@ const RootLayout = () => {
           options={{ headerShown: false }}
         />
       </Stack>
+      <StatusBar backgroundColor="#93B1A6" />
     </ShoplistProvider>
   );
 };

@@ -91,6 +91,7 @@ const DisplayShoplist = () => {
     return updateContent;
   };
 
+  // Use a state that will help choosing the right update choice.
   const addProduct = async () => {
     shoplistContent[0].products.push(productData.name);
     shoplistContent[0].price.push(parseInt(productData.price));
