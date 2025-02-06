@@ -210,6 +210,7 @@ const DisplayShoplist = () => {
             )}
             keyExtractor={(item) => item._id.toString()}
             extraData={shoplistContent}
+            overScrollMode="never"
             ListFooterComponent={
               loading ? (
                 <ActivityIndicator
@@ -267,7 +268,8 @@ const styles = StyleSheet.create({
   },
   displayContainer: {
     backgroundColor: "#183D3D",
-    borderRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
     height: "50%",
     position: "relative",
     width: "80%",
@@ -287,12 +289,15 @@ const styles = StyleSheet.create({
   shoplistNameStyle: {
     color: "white",
     fontSize: 20,
-    marginBottom: 20,
+    marginBottom: 30,
     marginTop: 20,
     fontFamily: "Outfit-Bold",
   },
   loading: {
     alignSelf: "center",
+  },
+  flatList: {
+    bottom: 20,
   },
 });
 

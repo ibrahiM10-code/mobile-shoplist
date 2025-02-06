@@ -97,13 +97,13 @@ const styles = StyleSheet.create({
   textStyle: {
     color: "white",
     fontSize: 25,
+    marginTop: 20,
     marginBottom: 10,
     fontFamily: "Outfit-Regular",
   },
   titleStyle: {
     color: "white",
     fontSize: 16,
-    marginBottom: 10,
     fontFamily: "Outfit-Regular",
     textAlign: "left",
   },
