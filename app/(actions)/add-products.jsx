@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 13,
     textAlign: "center",
     fontFamily: "Outfit-Bold",
   },

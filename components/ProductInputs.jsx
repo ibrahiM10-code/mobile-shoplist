@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     paddingRight: 25,
     width: "95%",
     left: 7,
-    bottom: 10,
+    bottom: 25,
     borderRadius: 10,
     zIndex: 1,
   },
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: "white",
-    fontSize: 13,
+    fontSize: 11,
     textAlign: "center",
     fontFamily: "Outfit-Medium",
   },

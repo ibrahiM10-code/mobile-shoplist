@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
     height: "50%",
     position: "relative",
-    width: "80%",
+    width: "88%",
   },
   displayContainerHidden: {
     backgroundColor: "#040D12",
