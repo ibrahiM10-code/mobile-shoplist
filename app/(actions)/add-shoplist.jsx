@@ -1,6 +1,7 @@
 import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
+import { Buttons, Typography, Colors, Container } from "../../styles/index";
 import CustomBackHandler from "../../components/BackHandler";
 import FormInput from "../../components/FormInput";
 import ShoplistContext from "../../context/ShoplistProvider";
@@ -15,7 +16,7 @@ const AddShoplist = () => {
     router.push("/add-products");
   };
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={Container.container}>
       <View style={styles.addShoplistWrapper}>
         <CustomBackHandler route={"index"} />
         <View style={styles.addShoplistContainer}>
@@ -37,33 +38,25 @@ const AddShoplist = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#040D12",
-  },
   addShoplistWrapper: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
   addShoplistContainer: {
-    backgroundColor: "#183D3D",
+    backgroundColor: Colors.mainColor,
     borderRadius: 10,
     padding: 20,
     width: "85%",
   },
   addShoplistBtn: {
-    backgroundColor: "#5C8374",
-    borderRadius: 10,
-    marginTop: 20,
-    padding: 10,
+    ...Buttons.buttonStyle,
+    marginTop: 15,
     width: "50%",
   },
   btnText: {
-    color: "white",
-    fontSize: 12,
+    ...Typography.buttonText,
     textAlign: "center",
-    fontFamily: "Outfit-Bold",
   },
 });
 

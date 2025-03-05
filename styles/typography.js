@@ -1,8 +1,17 @@
 import * as Colors from "./colors"
 
+const textColor = {
+    color: Colors.textAccent
+}
+
 const defaultStyles = {
-    color: Colors.textAccent,
+    ...textColor,
     fontFamily: "Outfit-Regular",
+}
+
+const boldFontStyle = {
+    ...textColor,
+    fontFamily: "Outfit-Bold"
 }
 
 export const title = {
@@ -11,31 +20,31 @@ export const title = {
 }
 
 export const productNameText = {
-    ...defaultStyles,
+    ...boldFontStyle,
     fontSize: 15
 }
 
 export const productQuantityText = {
     ...defaultStyles,
-    fontFamily: 11
+    fontSize: 11
 }
 
 export const productPriceText = {
-    ...defaultStyles,
+    ...boldFontStyle,
     fontSize: 20
 }
 
 export const buttonText = {
-    ...defaultStyles,
+    ...boldFontStyle,
     fontSize: 12
 }
 
 export const inputText = {
-    ...defaultStyles,
+    ...boldFontStyle,
     fontSize: 15 // Could change to 16-17
 }
 
 export const bigTitle = {
-    ...defaultStyles,
+    ...boldFontStyle,
     fontSize: 20
 }

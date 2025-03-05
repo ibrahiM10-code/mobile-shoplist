@@ -1,10 +1,9 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState, useEffect, useContext } from "react";
-import ShoplistContext from "../context/ShoplistProvider";
+import { Buttons, Colors, Typography } from "../styles/index";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import axios from "axios";
+import React from "react";
 
 const ProductDetails = ({
   details,
@@ -24,7 +23,18 @@ const ProductDetails = ({
     <SafeAreaView style={styles.container}>
       <View>
         {details.products.map((product, index) => (
-          <View style={styles.productDetailsContainer} key={index}>
+          <View
+            style={
+              index === 0
+                ? {
+                    borderTopRightRadius: 10,
+                    borderTopLeftRadius: 10,
+                    ...styles.productDetailsContainer,
+                  }
+                : styles.productDetailsContainer
+            }
+            key={index}
+          >
             <View style={styles.details}>
               <Text style={styles.productNameText}>{product}</Text>
               <Text style={styles.productQuantityText}>
@@ -43,10 +53,14 @@ const ProductDetails = ({
                   )
                 }
               >
-                <MaterialIcons name="edit-square" size={28} color="#5C8374" />
+                <MaterialIcons
+                  name="edit-square"
+                  size={28}
+                  color={Colors.buttonColor}
+                />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => removeProduct(index)}>
-                <Ionicons name="trash" size={28} color="#5C8374" />
+                <Ionicons name="trash" size={28} color={Colors.buttonColor} />
               </TouchableOpacity>
             </View>
           </View>
@@ -63,34 +77,24 @@ const styles = StyleSheet.create({
   productDetailsContainer: {
     flex: 1,
     flexDirection: "row",
-    backgroundColor: "#183D3D",
-    borderTopColor: "white",
-    // borderTopWidth: 1,
+    backgroundColor: Colors.mainColor,
+    borderColor: Colors.textAccent,
     borderBottomWidth: 1,
-    // borderBottomColor: "white",
     borderStyle: "solid",
     justifyContent: "space-around",
     alignItems: "center",
     padding: 3,
   },
   productNameText: {
-    color: "white",
-    fontSize: 15,
-    fontFamily: "Outfit-Regular",
-    // maxWidth: 60,
-    width: 70,
+    ...Typography.productNameText,
+    maxWidth: "60",
   },
   productQuantityText: {
-    color: "white",
-    fontSize: 11,
+    ...Typography.productQuantityText,
     marginTop: 3,
-    fontFamily: "Outfit-Regular",
   },
   productPrice: {
-    color: "white",
-    fontSize: 20,
-    fontFamily: "Outfit-Medium",
-    // maxWidth: 0,
+    ...Typography.productPriceText,
   },
   actionsContainer: {
     padding: 10,

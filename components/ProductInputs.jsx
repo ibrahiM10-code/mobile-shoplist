@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Buttons, Colors, Typography } from "../styles/index";
 import React from "react";
 import FormInput from "./FormInput";
 
@@ -59,30 +60,24 @@ const ProductInputs = ({
 const styles = StyleSheet.create({
   positioning: {
     position: "relative",
-    backgroundColor: "#5C8374",
+    backgroundColor: Colors.mainColor,
     paddingTop: 15,
     paddingBottom: 15,
     paddingLeft: 25,
     paddingRight: 25,
-    width: "95%",
-    left: 7,
-    bottom: 25,
     borderRadius: 10,
     zIndex: 1,
   },
   addProductsBtn: {
-    backgroundColor: "#183D3D",
-    borderRadius: 10,
-    padding: 10,
-    width: "40%",
+    ...Buttons.buttonStyle,
+    width: "45%",
   },
   btnText: {
-    color: "white",
-    fontSize: 11,
+    ...Typography.buttonText,
     textAlign: "center",
-    fontFamily: "Outfit-Medium",
   },
   btnsContainer: {
+    marginVertical: 3,
     paddingTop: 8,
     paddingBottom: 8,
     flexDirection: "row",

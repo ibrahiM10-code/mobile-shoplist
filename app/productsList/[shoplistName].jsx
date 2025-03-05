@@ -13,6 +13,7 @@ import ProductDetails from "../../components/ProductDetails";
 import ProductInputs from "../../components/ProductInputs";
 import React, { useState, useEffect } from "react";
 import CustomBackHandler from "../../components/BackHandler";
+import { Buttons, Colors, Typography, Container } from "../../styles/index";
 import { uid } from "uid";
 import axios from "axios";
 import { showToast } from "../../helpers/popToast";
@@ -179,7 +180,9 @@ const DisplayShoplist = () => {
     setTitle("Add new product");
   };
   return (
-    <SafeAreaView style={isShown ? styles.containerOpacity : styles.container}>
+    <SafeAreaView
+      style={isShown ? styles.containerOpacity : Container.container}
+    >
       <View style={styles.displayWrapper}>
         <CustomBackHandler route={"index"} />
         {loading ? (
@@ -216,11 +219,15 @@ const DisplayShoplist = () => {
                 <ActivityIndicator
                   style={styles.loading}
                   size={"large"}
-                  color={"#93B1A6"}
+                  color={Colors.textAccent}
                 />
               ) : (
                 <TouchableOpacity style={styles.addMoreBtn} onPress={showForm}>
-                  <AntDesign name="plussquare" size={35} color="#93B1A6" />
+                  <AntDesign
+                    name="plussquare"
+                    size={35}
+                    color={Colors.buttonColor}
+                  />
                 </TouchableOpacity>
               )
             }
@@ -253,13 +260,9 @@ const DisplayShoplist = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#040D12",
-  },
   containerOpacity: {
     flex: 1,
-    backgroundColor: "rgb(0, 0, 0)",
+    backgroundColor: Colors.background,
   },
   displayWrapper: {
     flex: 1,
@@ -267,7 +270,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   displayContainer: {
-    backgroundColor: "#183D3D",
+    backgroundColor: Colors.mainColor,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     height: "50%",
@@ -282,21 +287,19 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   addMoreBtn: {
+    marginTop: 10,
     alignSelf: "center",
     paddingTop: 15,
     paddingBottom: 15,
   },
   shoplistNameStyle: {
-    color: "white",
-    fontSize: 20,
-    marginBottom: 30,
+    ...Typography.bigTitle,
+    marginBottom: 20,
     marginTop: 20,
-    fontFamily: "Outfit-Bold",
   },
   loading: {
-    //position: "relative",
-    // bottom: 160,
-    //justifyContent: "center",
+    flexDirection: "row",
+    alignSelf: "center",
   },
   flatList: {
     bottom: 20,

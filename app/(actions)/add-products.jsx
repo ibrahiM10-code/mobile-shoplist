@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { apiUrl } from "../../helpers/apiUrl";
 import { showToast } from "../../helpers/popToast";
+import { Buttons, Typography, Colors, Container } from "../../styles/index";
 import CustomBackHandler from "../../components/BackHandler";
 import ProductInputs from "../../components/ProductInputs";
 import ShoplistContext from "../../context/ShoplistProvider";
@@ -82,7 +83,7 @@ const AddProducts = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={Container.container}>
       <View style={styles.addProductsWrapper}>
         <CustomBackHandler route={"add-shoplist"} />
         <View style={styles.addProductsContainer}>
@@ -113,15 +114,11 @@ const AddProducts = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#040D12",
-  },
   addProductsContainer: {
-    backgroundColor: "#183D3D",
+    backgroundColor: Colors.mainColor,
     borderRadius: 10,
-    paddingTop: 20,
-    paddingBottom: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
     paddingLeft: 25,
     paddingRight: 25,
     width: "85%",
@@ -132,12 +129,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textStyle: {
-    color: "white",
-    fontSize: 20,
+    ...Typography.bigTitle,
     textAlign: "center",
     marginTop: 20,
     marginBottom: 20,
-    fontFamily: "Outfit-Bold",
   },
   addProductsBtnContainer: {
     flexDirection: "row",
@@ -147,17 +142,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   addProductsBtn: {
-    backgroundColor: "#93B1A6",
-    borderRadius: 10,
-    padding: 10,
+    ...Buttons.buttonStyle,
     width: "45%",
-    height: "70%",
   },
   btnText: {
-    color: "white",
-    fontSize: 13,
+    ...Typography.buttonText,
+    textTransform: "uppercase",
     textAlign: "center",
-    fontFamily: "Outfit-Bold",
   },
 });
 

@@ -1,4 +1,5 @@
 import { View, Text, TextInput, StyleSheet } from "react-native";
+import { Typography } from "../styles/index";
 import React, { forwardRef } from "react";
 
 const FormInput = forwardRef(({ inputTitle, value, setValue }, ref) => {
@@ -28,10 +29,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   inputTitleStyle: {
-    fontSize: 17,
-    color: "white",
+    ...Typography.inputText,
     marginBottom: 10,
-    fontFamily: "Outfit-Medium",
   },
   inputTypeStyle: {
     backgroundColor: "transparent",

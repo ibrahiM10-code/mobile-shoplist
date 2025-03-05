@@ -9,7 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useState, useContext } from "react";
 import { router } from "expo-router";
 import { apiUrl } from "../helpers/apiUrl";
-import { Typography, Colors } from "../styles/index.js";
+import { Typography, Colors, Container } from "../styles/index.js";
 import ShoplistContext from "../context/ShoplistProvider";
 import Shoplist from "../components/Shoplist";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     ...Typography.bigTitle,
+    marginTop: 20,
   },
   titleStyle: {
     ...Typography.title,
