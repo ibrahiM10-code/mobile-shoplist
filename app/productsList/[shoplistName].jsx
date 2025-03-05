@@ -181,7 +181,7 @@ const DisplayShoplist = () => {
   return (
     <SafeAreaView style={isShown ? styles.containerOpacity : styles.container}>
       <View style={styles.displayWrapper}>
-        <CustomBackHandler />
+        <CustomBackHandler route={"index"} />
         {loading ? (
           <Text style={styles.shoplistNameStyle}>Loading {shoplistName}</Text>
         ) : (
@@ -214,7 +214,7 @@ const DisplayShoplist = () => {
             ListFooterComponent={
               loading ? (
                 <ActivityIndicator
-                  style={styles.addMoreBtn}
+                  style={styles.loading}
                   size={"large"}
                   color={"#93B1A6"}
                 />
@@ -294,7 +294,9 @@ const styles = StyleSheet.create({
     fontFamily: "Outfit-Bold",
   },
   loading: {
-    alignSelf: "center",
+    //position: "relative",
+    // bottom: 160,
+    //justifyContent: "center",
   },
   flatList: {
     bottom: 20,

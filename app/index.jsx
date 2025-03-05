@@ -9,6 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useState, useContext } from "react";
 import { router } from "expo-router";
 import { apiUrl } from "../helpers/apiUrl";
+import { Typography, Colors } from "../styles/index.js";
 import ShoplistContext from "../context/ShoplistProvider";
 import Shoplist from "../components/Shoplist";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -61,11 +62,11 @@ const HomeScreen = () => {
             ))
           )}
           <Text style={styles.textStyle}>Add a new shopping list</Text>
-          <TouchableOpacity>
+          <TouchableOpacity style={{ marginTop: 15 }}>
             <AntDesign
               name="plussquare"
               size={35}
-              color="#93B1A6"
+              color={Colors.buttonColor}
               onPress={() => router.push("/add-shoplist")}
             />
           </TouchableOpacity>
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
   homeContainer: {
     width: "80%",
     alignItems: "center",
-    backgroundColor: "#183D3D",
+    backgroundColor: Colors.mainColor,
     elevation: 24,
     borderRadius: 10,
     paddingTop: 20,
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#040D12",
+    backgroundColor: Colors.background,
   },
   homeWrapper: {
     flex: 1,
@@ -95,16 +96,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textStyle: {
-    color: "white",
-    fontSize: 25,
-    marginTop: 20,
-    marginBottom: 10,
-    fontFamily: "Outfit-Regular",
+    ...Typography.bigTitle,
   },
   titleStyle: {
-    color: "white",
-    fontSize: 16,
-    fontFamily: "Outfit-Regular",
+    ...Typography.title,
     textAlign: "left",
   },
 });

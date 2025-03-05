@@ -1,6 +1,7 @@
 import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
+import CustomBackHandler from "../../components/BackHandler";
 import FormInput from "../../components/FormInput";
 import ShoplistContext from "../../context/ShoplistProvider";
 import React, { useState, useContext } from "react";
@@ -16,6 +17,7 @@ const AddShoplist = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.addShoplistWrapper}>
+        <CustomBackHandler route={"index"} />
         <View style={styles.addShoplistContainer}>
           <FormInput
             inputTitle={"Name your new shopping list"}
@@ -48,7 +50,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#183D3D",
     borderRadius: 10,
     padding: 20,
-    width: "80%",
+    width: "85%",
   },
   addShoplistBtn: {
     backgroundColor: "#5C8374",

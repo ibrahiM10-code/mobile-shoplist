@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { apiUrl } from "../../helpers/apiUrl";
 import { showToast } from "../../helpers/popToast";
+import CustomBackHandler from "../../components/BackHandler";
 import ProductInputs from "../../components/ProductInputs";
 import ShoplistContext from "../../context/ShoplistProvider";
 import axios from "axios";
@@ -83,6 +84,7 @@ const AddProducts = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.addProductsWrapper}>
+        <CustomBackHandler route={"add-shoplist"} />
         <View style={styles.addProductsContainer}>
           <Text style={styles.textStyle}>Add products to {shoplistName}</Text>
           <ProductInputs
@@ -149,6 +151,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     width: "45%",
+    height: "70%",
   },
   btnText: {
     color: "white",
