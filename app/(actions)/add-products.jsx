@@ -12,7 +12,11 @@ import axios from "axios";
 
 const AddProducts = () => {
   const { shoplistName } = useContext(ShoplistContext);
-  const [productDetails, setProductDetails] = useState([]);
+  const [productDetails, setProductDetails] = useState({
+    name: [],
+    quantity: [],
+    price: [],
+  });
   const nameInput = useRef(null);
   const [productData, setProductData] = useState({
     name: "",
@@ -20,12 +24,16 @@ const AddProducts = () => {
     price: 0,
   });
 
-  const setDetails = async () => {
-    setProductDetails((prevProduct) => {
-      return [...prevProduct, productData];
-    });
-    // console.log("Added! to ", shoplistName);
+  const setDetails = () => {
+    console.log(productData);
+    setProductDetails((prev) => ({
+      ...prev,
+      name: [...prev.name, productData.name],
+      quantity: [...prev.quantity, parseInt(productData.quantity)],
+      price: [...prev.price, parseInt(productData.price)],
+    }));
     clearInputs();
+    console.log(productDetails);
     showToast("Product added!");
   };
 
@@ -38,31 +46,32 @@ const AddProducts = () => {
     });
   };
 
-  const clearInputs = () => {
-    setProductData({ name: "", quantity: "", price: "" });
-    nameInput.current?.focus();
-  };
-
-  const dataPayload = () => {
-    let quantitiesArray = [];
-    let pricesArray = [];
-    let productsArray = [];
+  const setShoppingListTotal = () => {
     let totalsArray = [];
-    productDetails.map((content) => {
-      totalsArray.push(content.quantity * content.price);
-      productsArray.push(content.name);
-      quantitiesArray.push(parseInt(content.quantity));
-      pricesArray.push(parseInt(content.price));
-      return 1;
-    });
+    for (let index = 0; index < productDetails.price.length; index++) {
+      totalsArray.push(
+        productDetails.price[index] * productDetails.quantity[index]
+      );
+    }
     const total = totalsArray.reduce((accumulator, currentValue) => {
       return accumulator + currentValue;
     }, 0);
+    return total;
+  };
+
+  const clearInputs = () => {
+    setProductData({ name: "", quantity: "", price: "" });
+    nameInput.current?.focus();
+    console.log(productDetails);
+  };
+
+  const dataPayload = () => {
+    const total = setShoppingListTotal();
     const shoplistData = {
       name: shoplistName,
-      products: productsArray,
-      quantity: quantitiesArray,
-      price: pricesArray,
+      products: productDetails.name,
+      quantity: productDetails.quantity,
+      price: productDetails.price,
       subTotal: total,
     };
     return shoplistData;
