@@ -13,11 +13,12 @@ import ProductDetails from "../../components/ProductDetails";
 import ProductInputs from "../../components/ProductInputs";
 import React, { useState, useEffect } from "react";
 import CustomBackHandler from "../../components/BackHandler";
-import { Buttons, Colors, Typography, Container } from "../../styles/index";
+import { Colors, Typography, Container } from "../../styles/index";
 import { uid } from "uid";
 import axios from "axios";
 import { showToast } from "../../helpers/popToast";
 import { apiUrl } from "../../helpers/apiUrl";
+import { handleSubtotal, prepNewProduct } from "../../helpers/functions";
 
 const DisplayShoplist = () => {
   const { shoplistName } = useLocalSearchParams();
@@ -62,27 +63,13 @@ const DisplayShoplist = () => {
     });
   };
 
-  const updateSubTotal = () => {
-    let totals = [];
-    for (let index = 0; index < shoplistContent[0].price.length; index++) {
-      totals.push(
-        shoplistContent[0].price[index] * shoplistContent[0].quantity[index]
-      );
-    }
-    const total = totals.reduce((accumulator, currentValue) => {
-      return accumulator + currentValue;
-    }, 0);
-    shoplistContent[0].subTotal = total;
-    return total;
-  };
-
   const prepUpdate = () => {
     shoplistContent[0].quantity[productData.index] = parseInt(
       productData.quantity
     );
     shoplistContent[0].price[productData.index] = parseInt(productData.price);
     shoplistContent[0].products[productData.index] = productData.name;
-    const total = updateSubTotal();
+    const total = handleSubtotal(shoplistContent[0]);
     const updateContent = {
       products: shoplistContent[0].products,
       quantity: shoplistContent[0].quantity,
@@ -93,16 +80,8 @@ const DisplayShoplist = () => {
   };
 
   // Use a state that will help choosing the right update choice.
-  const addProduct = async () => {
-    shoplistContent[0].products.push(productData.name);
-    shoplistContent[0].price.push(parseInt(productData.price));
-    shoplistContent[0].quantity.push(parseInt(productData.quantity));
-    const newProductContent = {
-      products: shoplistContent[0].products,
-      quantity: shoplistContent[0].quantity,
-      price: shoplistContent[0].price,
-      subTotal: updateSubTotal(),
-    };
+  const addNewProduct = async () => {
+    const newProductContent = prepNewProduct(shoplistContent, productData);
     try {
       const response = await axios.put(
         `${apiUrl}/update-shoplist/${shoplistContent[0]._id}`,
@@ -114,8 +93,7 @@ const DisplayShoplist = () => {
           newContent[0].subTotal = newProductContent.subTotal;
           return newContent;
         });
-        console.log(shoplistContent);
-        showToast("Product updated!");
+        showToast("Added new product!");
       }
     } catch (error) {
       if (error.status === 404) {
@@ -138,7 +116,6 @@ const DisplayShoplist = () => {
           updatedContent[0].subTotal = updateContent.subTotal;
           return updatedContent;
         });
-        console.log(shoplistContent);
         showToast("Product updated!");
       }
     } catch (error) {
@@ -157,7 +134,7 @@ const DisplayShoplist = () => {
         removeProducts[0].products.splice(index, 1);
         removeProducts[0].quantity.splice(index, 1);
         removeProducts[0].price.splice(index, 1);
-        removeProducts[0].subTotal = updateSubTotal();
+        removeProducts[0].subTotal = handleSubtotal(shoplistContent[0]);
 
         return removeProducts;
       });
@@ -217,7 +194,7 @@ const DisplayShoplist = () => {
             ListFooterComponent={
               loading ? (
                 <ActivityIndicator
-                  style={styles.loading}
+                  style={styles.addMoreBtn}
                   size={"large"}
                   color={Colors.textAccent}
                 />
@@ -240,7 +217,7 @@ const DisplayShoplist = () => {
               title={title}
               data={productData}
               updateFn={updateProduct}
-              addProductFn={addProduct}
+              addProductFn={addNewProduct}
               fn={handleProductInfo}
             />
           )}

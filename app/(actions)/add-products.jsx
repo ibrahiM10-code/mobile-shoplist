@@ -8,6 +8,7 @@ import { Buttons, Typography, Colors, Container } from "../../styles/index";
 import CustomBackHandler from "../../components/BackHandler";
 import ProductInputs from "../../components/ProductInputs";
 import ShoplistContext from "../../context/ShoplistProvider";
+import { handleSubtotal } from "../../helpers/functions";
 import axios from "axios";
 
 const AddProducts = () => {
@@ -33,7 +34,6 @@ const AddProducts = () => {
       price: [...prev.price, parseInt(productData.price)],
     }));
     clearInputs();
-    console.log(productDetails);
     showToast("Product added!");
   };
 
@@ -46,27 +46,26 @@ const AddProducts = () => {
     });
   };
 
-  const setShoppingListTotal = () => {
-    let totalsArray = [];
-    for (let index = 0; index < productDetails.price.length; index++) {
-      totalsArray.push(
-        productDetails.price[index] * productDetails.quantity[index]
-      );
-    }
-    const total = totalsArray.reduce((accumulator, currentValue) => {
-      return accumulator + currentValue;
-    }, 0);
-    return total;
-  };
+  // const setShoppingListTotal = () => {
+  //   let totalsArray = [];
+  //   for (let index = 0; index < productDetails.price.length; index++) {
+  //     totalsArray.push(
+  //       productDetails.price[index] * productDetails.quantity[index]
+  //     );
+  //   }
+  //   const total = totalsArray.reduce((accumulator, currentValue) => {
+  //     return accumulator + currentValue;
+  //   }, 0);
+  //   return total;
+  // };
 
   const clearInputs = () => {
     setProductData({ name: "", quantity: "", price: "" });
     nameInput.current?.focus();
-    console.log(productDetails);
   };
 
   const dataPayload = () => {
-    const total = setShoppingListTotal();
+    const total = handleSubtotal(productDetails);
     const shoplistData = {
       name: shoplistName,
       products: productDetails.name,

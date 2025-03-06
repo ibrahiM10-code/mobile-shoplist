@@ -15,13 +15,12 @@ const Shoplist = ({ name, shoplistId, setReload, reload }) => {
         `${apiUrl}/delete-shoplist/${shoplistId}`
       );
       if (response.status === 200) {
-        console.log(`The ${name} shoplist has been deleted.`);
         showToast("Shopping list removed!");
         setReload(!reload);
       }
     } catch (error) {
       if (error.status === 400) {
-        console.log(
+        console.error(
           `There has been an error when deleting the ${name} shoplist.`
         );
       }
